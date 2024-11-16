@@ -1,0 +1,279 @@
+{
+  "userName": "Username",
+  "@userName": {
+    "description": "The text used for user name field"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "The text used for password field"
+  },
+  "login": "Login",
+  "@login": {
+    "description": "The text used for login button"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "The text used for logout button"
+  },
+  "forgotPassword": "Forget password?",
+  "@forgotPassword": {
+    "description": "The text used for forget password"
+  },
+  "wrongUsernameOrPassword": "Wrong username or password",
+  "@wrongUsernameOrPassword": {
+    "description": "The text used for wrong password/username server error"
+  },
+  "enterUsername": "Enter username",
+  "@enterUsername": {
+    "description": "The text used for empty username error"
+  },
+  "enterPassword": "Enter password",
+  "@enterPassword": {
+    "description": "The text used for empty password error"
+  },
+  "shortPassword": "Password should be 8 characters or more",
+  "@shortPassword": {
+    "description": "The text used for empty password error"
+  },
+  "genericErrorMessage": "An error occurred, please try again",
+  "@genericErrorMessage": {
+    "description": "The text used for generic error message"
+  },
+  "retryAgain": "Try again",
+  "@retryAgain": {
+    "description": "The text used for generic error message"
+  },
+  "pleaseRetryAgain": "Please try again",
+  "@pleaseRetryAgain": {
+    "description": "The text used for generic error message"
+  },
+  "rememberMe": "Remember me",
+  "@rememberMe": {
+    "description": "The text used for remember password"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "The text used for ok label"
+  },
+  "privacyPolicyTitle": "Privacy Policy",
+  "@privacyPolicyTitle": {
+    "description": "The text used for privacy policy label"
+  },
+  "showAll": "Show all",
+  "@showAll": {
+    "description": "The text used for show all label"
+  },
+
+  "showMore": "Show more",
+  "@showMore": {
+    "description": "The show more text"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "The text used for home label"
+  },
+  "library": "Library",
+  "@library": {
+    "description": "The text used for library label"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "The text used for search label"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "The text used for profile label"
+  },
+  "mySaawt": "My Saawt",
+  "@mySaawt": {
+    "description": "The text used for my Saawt label"
+  },
+  "audioBooks": "Audio books",
+  "@audioBooks": {
+    "description": "The text used for my Audio Books label"
+  },
+  "channels": "Channels",
+  "@channels": {
+    "description": "The text used for my Channels label"
+  },
+  "podcasts": "Podcasts",
+  "@podcasts": {
+    "description": "The text used for my Podcasts label"
+  },
+  "trendingPodcasts": "Trending Podcasts",
+  "@trendingPodcasts": {
+    "description": "The text used for my Trending Podcasts label"
+  },
+  "continueListening": "Continue Listening",
+  "@continueListening": {
+    "description": "The text used for my Continue Listening label"
+  },
+  "suggestedForYou": "Suggested For You",
+  "@suggestedForYou": {
+    "description": "The text used for my Suggested for you label"
+  },
+  "recommendedChannels": "Recommended Channels",
+  "@recommendedChannels": {
+    "description": "The text used for my Recommended Channels label"
+  },
+  "checkInternetConnection": "No internet connection, please try again",
+  "@checkInternetConnection": {
+    "description": "The text used for check internet connection label text"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "The text used for retry label text"
+  },
+  "discoverMore": "Discover More",
+  "@discoverMore": {
+    "description": "The text used for discover more text on buttons"
+  },
+  "noDownloadsYet": "No downloads yet",
+  "@noDownloadsYet": {
+    "description": "The text used to display no downloads text"
+  },
+  "noDownloadsDescription": "Explore, download, and enjoy your favorite content all in one place.",
+  "@noDownloadsDescription": {
+    "description": "The text used to display no downloads text"
+  },
+  "selectGenres": "Select genres",
+  "@selectGenres": {
+    "description": "The text in the select genres page"
+  },
+  "selectGenresDesc": "Select the type of book you enjoy reading.",
+  "@selectGenresDesc": {
+    "description": "The text in the select genres page"
+  },
+  "skip": "Skip",
+  "@skip": {
+    "description": "The skip text"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "The next text"
+  },
+  "continueText": "Continue",
+  "@continueText": {
+    "description": "The continue text"
+  },
+  "aboutThisBook": "About this book",
+  "@aboutThisBook": {
+    "description": "The text in the book details page"
+  },
+  "chapters": "Chapters",
+  "@chapters": {
+    "description": "The text in the book details page"
+  },
+  "similarBooks": "Similar Books",
+  "@similarBooks": {
+    "description": "The text in the book details page"
+  },
+  "minute": "min",
+  "@minute": {
+    "description": "The text in the book details page"
+  },
+  "downloads": "Downloads",
+  "@downloads": {
+    "description": "Downloads text"
+  },
+  "saved": "Saved",
+  "@saved": {
+    "description": "Saved text"
+  },
+  "inProgress": "In Progress",
+  "@inProgress": {
+    "description": "In progress text"
+  },
+  "completed": "Completed",
+  "@completed": {
+    "description": "Completed text"
+  },
+  "discoverAudioBooks": "Discover audiobooks",
+  "@discoverAudioBooks": {
+    "description": "Found in the discover more page"
+  },
+  "trending": "Trending",
+  "@trending": {
+    "description": "Found in the discover more page"
+  },
+  "genresAndCategories": "Genres and Categories",
+  "@genresAndCategories": {
+    "description": "Found in the discover more page"
+  },
+  "topAudioBookForYou": "Genres and Categories",
+  "@topAudioBookForYou": {
+    "description": "Top Audiobook Picks for you"
+  },
+  "noAccountText": "It seems you don't have an account. Let's set up a new one for you.",
+  "@noAccountText": {
+    "description": "Found in the register screen"
+  },
+  "termsAgree": "By selecting Create Account below, I agree to ",
+  "@termsAgree": {
+    "description": "Found in the register screen"
+  },
+  "createAccount": "Create account",
+  "@createAccount": {
+    "description": "Found in the register screen"
+  },
+  "alreadyHaveAnAccount": "Already have an account? ",
+  "@alreadyHaveAnAccount": {
+    "description": "Found in the register screen"
+  },
+  "signUp": "Sign up",
+  "@signUp": {
+    "description": "Found in the register screen"
+  },
+  "termsAndService": "Terms of Service & Privacy Policy",
+  "@termsAndService": {
+    "description": "Found in the register screen"
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Found in a textField"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Found in a textField"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Found in a textField"
+  },
+  "emptyField": "One of the fields in empty",
+  "@emptyField": {
+    "description": "Found in a textField"
+  },
+  "passwordLengthError": "Password cannot be less than 8 characters",
+  "@passwordLengthError": {
+    "description": "Found in a textField"
+  },
+  "play": "Play",
+  "@play": {
+    "description": "play text"
+  },
+  "orText": "Or",
+  "@orText": {
+    "description": "found in the login page"
+  },
+  "loginWithFacebook": "Login with Facebook",
+  "@loginWithFacebook": {
+    "description": "found in the login page"
+  },
+  "loginWithGoogle": "Login with Google",
+  "@loginWithGoogle": {
+    "description": "found in the login page"
+  },
+  "loginWithApple": "Login with Apple",
+  "@loginWithApple": {
+    "description": "found in the login page"
+  },
+  "skipLogin": "Skip Login",
+  "@skipLogin": {
+    "description": "found in the login page"
+  },
+  "noAccount": "Don’t have an account? ",
+  "@noAccount": {
+    "description": "found in the login page"
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,16 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: const Image(
-                image: AssetImage(
-                  "assets/images/pl_portrait.jpg",
-                ),
-                fit: BoxFit.fill,
-              ),
-            ),
+            _buildImage(context),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -112,6 +104,19 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
   }
 
+  SizedBox _buildImage(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      child: const Image(
+        image: AssetImage(
+          "assets/images/pl_portrait.jpg",
+        ),
+        fit: BoxFit.fill,
+      ),
+    );
+  }
+
   SizedBox _buildButton(ColorScheme colorScheme, TextTheme textTheme) {
     return SizedBox(
       width: 160,
@@ -151,15 +156,15 @@ class _LoginScreenState extends State<LoginScreen> {
       child: TextField(
         controller: _emailController,
         style: textTheme.labelMedium?.copyWith(color: Colors.black),
-        decoration: const InputDecoration(
-          prefixIcon: Icon(
+        decoration: InputDecoration(
+          prefixIcon: const Icon(
             Icons.email,
             size: 24,
           ),
-          hintText: "Email",
+          hintText: AppLocalizations.of(context)!.email,
           border: InputBorder.none, // Remove underline
           contentPadding:
-              EdgeInsets.symmetric(vertical: 15.0), // Align text and icon
+              const EdgeInsets.symmetric(vertical: 15.0), // Align text and icon
           isDense: true, // Reduce space inside the TextField
         ),
       ),
