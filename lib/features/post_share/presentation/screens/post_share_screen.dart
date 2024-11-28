@@ -1,4 +1,8 @@
 import 'package:digital_defender/core/utils/constants/app_constants.dart';
+import 'package:digital_defender/core/utils/constants/constant_functions.dart';
+import 'package:digital_defender/features/post_share/presentation/widgets/controls_overlay.dart';
+import 'package:digital_defender/features/post_share/presentation/widgets/fullscreen_player.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:digital_defender/di/di_container.dart';
 import 'package:digital_defender/features/common/presentation/widgets/common_button.dart';
 import 'package:digital_defender/features/common/presentation/widgets/custom_loading.dart';
@@ -17,7 +21,6 @@ class PostShareScreen extends StatefulWidget {
 
 class _PostShareScreenState extends State<PostShareScreen> {
   late VideoPlayerController _controller;
-  bool _isFullScreen = false;
   final PostBloc _postBloc = getIt<PostBloc>();
   final TextEditingController _linkController = TextEditingController();
   final ValueNotifier<bool> _enabled = ValueNotifier(false);
@@ -75,12 +78,27 @@ class _PostShareScreenState extends State<PostShareScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      "Distribute our curated content to your network and groups to educate and inform others.",
-                      style:
-                          textTheme.labelLarge?.copyWith(color: Colors.black),
-                      textAlign: TextAlign.center,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.share,
+                          size: 34,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              AppLocalizations.of(context)!.postShareDesc,
+                              style: textTheme.labelLarge
+                                  ?.copyWith(color: Colors.black),
+                              textAlign: TextAlign.center,
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   state.isVideoLoading
@@ -93,25 +111,28 @@ class _PostShareScreenState extends State<PostShareScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Column(
                       children: [
-                        const SectionItem(
-                            number: "1",
-                            title:
-                                "Download the content before so you can publish it."),
+                        SectionItem(
+                          number: "1",
+                          title: AppLocalizations.of(context)!
+                              .downloadContentToPublish,
+                        ),
                         const SizedBox(
                           height: 8,
                         ),
                         CommonButton(
-                          text: "Download Content",
+                          text: AppLocalizations.of(context)!.downloadContent,
                           icon: Icons.download,
-                          onTap: () {},
+                          onTap: () {
+                            saveVideo(state.getVideoResponse.link);
+                          },
                         ),
                         const SizedBox(
                           height: 16,
                         ),
-                        const SectionItem(
-                            number: "2",
-                            title:
-                                "Paste the URL of your uploaded content, then click on 'Confirm Post' to confirm that you posted content."),
+                        SectionItem(
+                          number: "2",
+                          title: AppLocalizations.of(context)!.pastUrl,
+                        ),
                         const SizedBox(
                           height: 8,
                         ),
@@ -124,9 +145,10 @@ class _PostShareScreenState extends State<PostShareScreen> {
                             },
                             style: textTheme.bodyLarge
                                 ?.copyWith(color: Colors.black),
-                            decoration: const InputDecoration(
-                              hintText: "Facebook post URL",
-                              prefixIcon: Icon(Icons.link),
+                            decoration: InputDecoration(
+                              hintText:
+                                  AppLocalizations.of(context)!.facebookUrl,
+                              prefixIcon: const Icon(Icons.link),
                             ),
                           ),
                         ),
@@ -137,7 +159,7 @@ class _PostShareScreenState extends State<PostShareScreen> {
                             valueListenable: _enabled,
                             builder: (context, val, _) {
                               return CommonButton(
-                                text: "Confirm Post",
+                                text: AppLocalizations.of(context)!.confirmPost,
                                 enabled: _linkController.text.trim().isNotEmpty,
                                 onTap: () {
                                   _postBloc.add(
@@ -152,15 +174,16 @@ class _PostShareScreenState extends State<PostShareScreen> {
                           height: 8,
                         ),
                         Text(
-                          "or",
-                          style: textTheme.labelLarge
-                              ?.copyWith(color: Colors.black),
+                          AppLocalizations.of(context)!.orText,
+                          style: textTheme.labelLarge?.copyWith(
+                            color: Colors.black,
+                          ),
                         ),
                         const SizedBox(
                           height: 8,
                         ),
                         CommonButton(
-                          text: "Get another post",
+                          text: AppLocalizations.of(context)!.getAnotherPost,
                           backgroundColor: Colors.grey,
                           textColor: Colors.black,
                           onTap: () {
@@ -168,7 +191,7 @@ class _PostShareScreenState extends State<PostShareScreen> {
                               const GetVideo(),
                             );
                           },
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -191,7 +214,7 @@ class _PostShareScreenState extends State<PostShareScreen> {
                   alignment: Alignment.bottomCenter,
                   children: [
                     VideoPlayer(_controller),
-                    _ControlsOverlay(controller: _controller),
+                    ControlsOverlay(controller: _controller),
                     VideoProgressIndicator(
                       _controller,
                       allowScrubbing: true,
@@ -217,11 +240,9 @@ class _PostShareScreenState extends State<PostShareScreen> {
                           value.isPlaying ? Icons.pause : Icons.play_arrow,
                         ),
                         onPressed: () {
-                          setState(() {
-                            value.isPlaying
-                                ? _controller.pause()
-                                : _controller.play();
-                          });
+                          value.isPlaying
+                              ? _controller.pause()
+                              : _controller.play();
                         },
                       );
                     },
@@ -229,18 +250,13 @@ class _PostShareScreenState extends State<PostShareScreen> {
                   IconButton(
                     icon: const Icon(Icons.fullscreen),
                     onPressed: () {
-                      setState(() {
-                        _isFullScreen = !_isFullScreen;
-                      });
-                      if (_isFullScreen) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                FullScreenVideoPlayer(controller: _controller),
-                          ),
-                        );
-                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              FullScreenVideoPlayer(controller: _controller),
+                        ),
+                      );
                     },
                   ),
                 ],
@@ -273,137 +289,13 @@ class _PostShareScreenState extends State<PostShareScreen> {
           ),
           child: Text(
             '${formatDuration(position)} / ${formatDuration(duration)}',
-            style: const TextStyle(color: Colors.white, fontSize: 14),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
           ),
         );
       },
     );
-  }
-}
-
-class _ControlsOverlay extends StatelessWidget {
-  const _ControlsOverlay({required this.controller});
-
-  final VideoPlayerController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        controller.value.isPlaying ? controller.pause() : controller.play();
-      },
-      child: Stack(
-        children: [
-          // Dim background when overlay is visible
-          Container(
-            color: controller.value.isPlaying
-                ? Colors.transparent
-                : Colors.black.withOpacity(0.5),
-          ),
-          // Center play/pause icon
-          if (!controller.value.isPlaying)
-            Center(
-              child: Icon(
-                Icons.play_arrow,
-                size: 100,
-                color: Colors.white.withOpacity(0.7),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class FullScreenVideoPlayer extends StatelessWidget {
-  const FullScreenVideoPlayer({super.key, required this.controller});
-
-  final VideoPlayerController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Video player with aspect ratio
-            AspectRatio(
-              aspectRatio: controller.value.aspectRatio,
-              child: VideoPlayer(controller),
-            ),
-            // Controls overlay for play/pause functionality
-            _ControlsOverlay(controller: controller),
-            // Additional controls (timeline, time indicator, fullscreen exit)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  VideoProgressIndicator(
-                    controller,
-                    allowScrubbing: true,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Play/Pause Button
-                        IconButton(
-                          icon: Icon(
-                            controller.value.isPlaying
-                                ? Icons.pause
-                                : Icons.play_arrow,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            controller.value.isPlaying
-                                ? controller.pause()
-                                : controller.play();
-                          },
-                        ),
-                        // Time Indicator
-                        Text(
-                          _buildTimeIndicator(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        // Fullscreen Exit Button
-                        IconButton(
-                          icon: const Icon(Icons.fullscreen_exit,
-                              color: Colors.white),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  String _buildTimeIndicator() {
-    final position = controller.value.position;
-    final duration = controller.value.duration;
-
-    String formatDuration(Duration d) {
-      String twoDigits(int n) => n.toString().padLeft(2, '0');
-      final minutes = twoDigits(d.inMinutes.remainder(60));
-      final seconds = twoDigits(d.inSeconds.remainder(60));
-      return '$minutes:$seconds';
-    }
-
-    return '${formatDuration(position)} / ${formatDuration(duration)}';
   }
 }
