@@ -107,94 +107,7 @@ class _PostShareScreenState extends State<PostShareScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Column(
-                      children: [
-                        SectionItem(
-                          number: "1",
-                          title: AppLocalizations.of(context)!
-                              .downloadContentToPublish,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        CommonButton(
-                          text: AppLocalizations.of(context)!.downloadContent,
-                          icon: Icons.download,
-                          onTap: () {
-                            saveVideo(state.getVideoResponse.link);
-                          },
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        SectionItem(
-                          number: "2",
-                          title: AppLocalizations.of(context)!.pastUrl,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.85,
-                          child: TextField(
-                            controller: _linkController,
-                            onChanged: (r) {
-                              _enabled.value = r.trim().isNotEmpty;
-                            },
-                            style: textTheme.bodyLarge
-                                ?.copyWith(color: Colors.black),
-                            decoration: InputDecoration(
-                              hintText:
-                                  AppLocalizations.of(context)!.facebookUrl,
-                              prefixIcon: const Icon(Icons.link),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 32,
-                        ),
-                        ValueListenableBuilder(
-                            valueListenable: _enabled,
-                            builder: (context, val, _) {
-                              return CommonButton(
-                                text: AppLocalizations.of(context)!.confirmPost,
-                                enabled: _linkController.text.trim().isNotEmpty,
-                                onTap: () {
-                                  _postBloc.add(
-                                    PostVideo(
-                                      _linkController.text.trim(),
-                                    ),
-                                  );
-                                },
-                              );
-                            }),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.orText,
-                          style: textTheme.labelLarge?.copyWith(
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        CommonButton(
-                          text: AppLocalizations.of(context)!.getAnotherPost,
-                          backgroundColor: Colors.grey,
-                          textColor: Colors.black,
-                          onTap: () {
-                            _postBloc.add(
-                              const GetVideo(),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buildSections(context, state, textTheme),
                 ],
               );
             },
@@ -202,6 +115,99 @@ class _PostShareScreenState extends State<PostShareScreen> {
         ),
       ),
     );
+  }
+
+  Padding _buildSections(
+      BuildContext context, PostState state, TextTheme textTheme) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: [
+          SectionItem(
+            number: "1",
+            title: AppLocalizations.of(context)!.downloadContentToPublish,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          CommonButton(
+            text: AppLocalizations.of(context)!.downloadContent,
+            icon: Icons.download,
+            onTap: () {
+              saveVideo(state.getVideoResponse.link);
+            },
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          SectionItem(
+            number: "2",
+            title: AppLocalizations.of(context)!.pastUrl,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.85,
+            child: TextField(
+              controller: _linkController,
+              onChanged: (r) {
+                _enabled.value = r.trim().isNotEmpty;
+              },
+              style: textTheme.bodyLarge?.copyWith(color: Colors.black),
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.facebookUrl,
+                prefixIcon: const Icon(Icons.link),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 32,
+          ),
+          _buildConfirmButton(),
+          const SizedBox(
+            height: 8,
+          ),
+          Text(
+            AppLocalizations.of(context)!.orText,
+            style: textTheme.labelLarge?.copyWith(
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          CommonButton(
+            text: AppLocalizations.of(context)!.getAnotherPost,
+            backgroundColor: Colors.grey,
+            textColor: Colors.black,
+            onTap: () {
+              _postBloc.add(
+                const GetVideo(),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  ValueListenableBuilder<bool> _buildConfirmButton() {
+    return ValueListenableBuilder(
+        valueListenable: _enabled,
+        builder: (context, val, _) {
+          return CommonButton(
+            text: AppLocalizations.of(context)!.confirmPost,
+            enabled: _linkController.text.trim().isNotEmpty,
+            onTap: () {
+              _postBloc.add(
+                PostVideo(
+                  _linkController.text.trim(),
+                ),
+              );
+            },
+          );
+        });
   }
 
   Widget _buildVideo(BuildContext context, ColorScheme colorScheme) {
