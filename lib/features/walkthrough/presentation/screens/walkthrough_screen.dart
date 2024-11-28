@@ -44,15 +44,18 @@ class _WalkthroughScreenState extends State<WalkthroughScreen> {
     return ValueListenableBuilder(
         valueListenable: _currentIndex,
         builder: (context, val, _) {
-          return SizedBox(
-            height: 200,
-            child: PageView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _controller,
-                itemCount: walkthroughItems.length,
-                itemBuilder: (context, index) {
-                  return walkthroughItems[index];
-                }),
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              height: 200,
+              child: PageView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _controller,
+                  itemCount: walkthroughItems.length,
+                  itemBuilder: (context, index) {
+                    return walkthroughItems[index];
+                  }),
+            ),
           );
         });
   }

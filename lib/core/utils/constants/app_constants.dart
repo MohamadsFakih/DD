@@ -1,6 +1,8 @@
 import 'package:digital_defender/core/utils/constants/string_constants.dart';
+import 'package:digital_defender/di/di_container.dart';
 import 'package:digital_defender/features/walkthrough/presentation/widgets/walthrough_item.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 const List<WalkthroughItem> walkthroughItems = [
   WalkthroughItem(
@@ -24,3 +26,17 @@ const List<WalkthroughItem> walkthroughItems = [
     description: walkthrough4Desc,
   ),
 ];
+
+/// The environment class
+/// used to change the project environment
+class Environment {
+  final String name;
+
+  const Environment(this.name);
+
+  static const dev = 'dev';
+  static const prod = 'prod';
+}
+
+/// get logger singleton from the app container
+Logger get logger => getIt<Logger>();
