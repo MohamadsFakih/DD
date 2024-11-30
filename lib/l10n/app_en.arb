@@ -275,5 +275,33 @@
   "noAccount": "Don’t have an account? ",
   "@noAccount": {
     "description": "found in the login page"
+  },
+  "downloadContentToPublish": "Download the content before so you can publish it.",
+  "@downloadContentToPublish": {
+    "description": "found in the post &  share page"
+  },
+  "downloadContent": "Download Content",
+  "@downloadContent": {
+    "description": "found in the post &  share page"
+  },
+  "pastUrl": "Paste the URL of your uploaded content, then click on 'Confirm Post' to confirm that you posted content.",
+  "@pastUrl": {
+    "description": "found in the post &  share page"
+  },
+  "facebookUrl": "Facebook post URL",
+  "@facebookUrl": {
+    "description": "found in the post &  share page"
+  },
+  "confirmPost": "Confirm Post",
+  "@confirmPost": {
+    "description": "found in the post &  share page"
+  },
+  "getAnotherPost": "Get another post",
+  "@getAnotherPost": {
+    "description": "found in the post &  share page"
+  },
+  "postShareDesc": "Distribute our curated content to your network and groups to educate and inform others.",
+  "@postShareDesc": {
+    "description": "found in the post &  share page"
   }
 }
