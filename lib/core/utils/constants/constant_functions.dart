@@ -73,3 +73,18 @@ String extractFilename(String url) {
   logger.d(uri.pathSegments.last);
   return uri.pathSegments.last; // Extracts the last segment of the path
 }
+
+String getCorrectSocialMediaName(int index) {
+  switch (index) {
+    case 0:
+      return "Facebook";
+    case 1:
+      return "Instagram";
+    case 2:
+      return "Tiktok";
+    case 3:
+      return "Twitter";
+    default:
+      return "Facebook";
+  }
+}

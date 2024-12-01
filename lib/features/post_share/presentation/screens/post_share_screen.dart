@@ -1,5 +1,7 @@
 import 'package:digital_defender/core/utils/constants/app_constants.dart';
 import 'package:digital_defender/core/utils/constants/constant_functions.dart';
+import 'package:digital_defender/features/common/presentation/widgets/page_title.dart';
+import 'package:digital_defender/features/common/presentation/widgets/social_media_switch.dart';
 import 'package:digital_defender/features/post_share/presentation/widgets/controls_overlay.dart';
 import 'package:digital_defender/features/post_share/presentation/widgets/fullscreen_player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -25,6 +27,8 @@ class _PostShareScreenState extends State<PostShareScreen> {
   final TextEditingController _linkController = TextEditingController();
   final ValueNotifier<bool> _enabled = ValueNotifier(false);
   bool startedInitialize = false;
+  final ValueNotifier<int> _selectedSocial = ValueNotifier(0);
+
   @override
   void initState() {
     super.initState();
@@ -78,28 +82,14 @@ class _PostShareScreenState extends State<PostShareScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.share,
-                          size: 34,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              AppLocalizations.of(context)!.postShareDesc,
-                              style: textTheme.labelLarge
-                                  ?.copyWith(color: Colors.black),
-                              textAlign: TextAlign.center,
-                              maxLines: 4,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      ],
+                    padding: const EdgeInsets.all(8.0),
+                    child: SocialMediaSwitch(
+                      selectedButtonNotifier: _selectedSocial,
                     ),
+                  ),
+                  PageTitle(
+                    title: AppLocalizations.of(context)!.postShareDesc,
+                    icon: Icons.share,
                   ),
                   state.isVideoLoading
                       ? const CustomLoading()
@@ -147,20 +137,24 @@ class _PostShareScreenState extends State<PostShareScreen> {
           const SizedBox(
             height: 8,
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.85,
-            child: TextField(
-              controller: _linkController,
-              onChanged: (r) {
-                _enabled.value = r.trim().isNotEmpty;
-              },
-              style: textTheme.bodyLarge?.copyWith(color: Colors.black),
-              decoration: InputDecoration(
-                hintText: AppLocalizations.of(context)!.facebookUrl,
-                prefixIcon: const Icon(Icons.link),
-              ),
-            ),
-          ),
+          ValueListenableBuilder(
+              valueListenable: _selectedSocial,
+              builder: (context, val, _) {
+                return SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  child: TextField(
+                    controller: _linkController,
+                    onChanged: (r) {
+                      _enabled.value = r.trim().isNotEmpty;
+                    },
+                    style: textTheme.bodyLarge?.copyWith(color: Colors.black),
+                    decoration: InputDecoration(
+                      hintText: "${getCorrectSocialMediaName(val)} post url",
+                      prefixIcon: const Icon(Icons.link),
+                    ),
+                  ),
+                );
+              }),
           const SizedBox(
             height: 32,
           ),
