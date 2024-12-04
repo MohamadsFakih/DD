@@ -1,3 +1,4 @@
+import 'package:digital_defender/features/post_share/data/model/get_video_params.dart';
 import 'package:digital_defender/features/post_share/data/model/get_video_response.dart';
 import 'package:digital_defender/features/post_share/domain/usecase/post_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<PostEvent>((event, emit) async {
       await event.when(
           postVideo: (String link) => _postVideo(link, emit),
-          getVideo: () => _getVideo(emit));
+          getVideo: (GetVideoParams params) => _getVideo(params, emit));
     });
   }
   final PostUseCase _postUseCase;
@@ -42,13 +43,13 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     );
   }
 
-  _getVideo(Emitter<PostState> emit) async {
+  _getVideo(GetVideoParams params, Emitter<PostState> emit) async {
     emit(
       state.copyWith(
         isVideoLoading: true,
       ),
     );
-    final res = await _postUseCase.getVideo();
+    final res = await _postUseCase.getVideo(params);
     res.fold((error) => emit(state), (response) {
       emit(
         state.copyWith(

@@ -2,6 +2,8 @@ import 'package:digital_defender/core/utils/constants/app_constants.dart';
 import 'package:digital_defender/core/utils/constants/constant_functions.dart';
 import 'package:digital_defender/features/common/presentation/widgets/page_title.dart';
 import 'package:digital_defender/features/common/presentation/widgets/social_media_switch.dart';
+import 'package:digital_defender/features/common/presentation/widgets/time_indicator.dart';
+import 'package:digital_defender/features/post_share/data/model/get_video_params.dart';
 import 'package:digital_defender/features/post_share/presentation/widgets/controls_overlay.dart';
 import 'package:digital_defender/features/post_share/presentation/widgets/fullscreen_player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,7 +35,11 @@ class _PostShareScreenState extends State<PostShareScreen> {
   void initState() {
     super.initState();
     _postBloc.add(
-      const GetVideo(),
+      GetVideo(
+        GetVideoParams(
+            platform: getCorrectSocialMediaName(_selectedSocial.value),
+            type: "POST_SHARE"),
+      ),
     );
   }
 
@@ -177,7 +183,12 @@ class _PostShareScreenState extends State<PostShareScreen> {
             textColor: Colors.black,
             onTap: () {
               _postBloc.add(
-                const GetVideo(),
+                GetVideo(
+                  GetVideoParams(
+                      platform:
+                          getCorrectSocialMediaName(_selectedSocial.value),
+                      type: "POST_SHARE"),
+                ),
               );
             },
           ),
@@ -223,7 +234,7 @@ class _PostShareScreenState extends State<PostShareScreen> {
                     Positioned(
                       bottom: 10,
                       left: 10,
-                      child: _buildTimeIndicator(),
+                      child: TimeIndicator(controller: _controller),
                     ),
                   ],
                 ),
@@ -264,38 +275,5 @@ class _PostShareScreenState extends State<PostShareScreen> {
             ],
           )
         : const CustomLoading();
-  }
-
-  Widget _buildTimeIndicator() {
-    // Returns the elapsed time and total duration as a text indicator
-    return ValueListenableBuilder(
-      valueListenable: _controller,
-      builder: (context, VideoPlayerValue value, child) {
-        final duration = value.duration;
-        final position = value.position;
-
-        String formatDuration(Duration d) {
-          String twoDigits(int n) => n.toString().padLeft(2, '0');
-          final minutes = twoDigits(d.inMinutes.remainder(60));
-          final seconds = twoDigits(d.inSeconds.remainder(60));
-          return '$minutes:$seconds';
-        }
-
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.6),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Text(
-            '${formatDuration(position)} / ${formatDuration(duration)}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-            ),
-          ),
-        );
-      },
-    );
   }
 }

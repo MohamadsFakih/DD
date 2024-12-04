@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<bool> requestMediaPermissions() async {
   // Check and request storage permission for Android or photo library permission for iOS
@@ -86,5 +87,14 @@ String getCorrectSocialMediaName(int index) {
       return "Twitter";
     default:
       return "Facebook";
+  }
+}
+
+Future<void> openUrl(String url) async {
+  final Uri uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    throw 'Could not launch $url';
   }
 }
