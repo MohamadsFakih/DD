@@ -1,4 +1,5 @@
 import 'package:digital_defender/features/post_share/presentation/screens/post_share_screen.dart';
+import 'package:digital_defender/features/quick_reply/presentation/screens/quick_reply_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -19,9 +20,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
   List<Widget> _buildScreens() {
     return [
       const PostShareScreen(),
-      const Center(
-        child: Text("screen2"),
-      ),
+      const QuickReplyScreen(),
       const Center(
         child: Text("screen3"),
       ),

@@ -32,12 +32,21 @@
     <string>We need access to your photo library to save images.</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>We need access to your photo library to save images.</string>
+    <key>NSCameraUsageDescription</key>
+     <string>We need access to select photos from the gallery</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to select photos from the gallery</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>http</string>
+      <string>https</string>
+    </array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

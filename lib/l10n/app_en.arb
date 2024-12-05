@@ -303,5 +303,29 @@
   "postShareDesc": "Distribute our curated content to your network and groups to educate and inform others.",
   "@postShareDesc": {
     "description": "found in the post &  share page"
+  },
+  "confirmReply": "Confirm Reply",
+  "@confirmReply": {
+    "description": "found in the post &  share page"
+  },
+  "uploadScreenshot": "Upload screenshot (optional)",
+  "@uploadScreenshot": {
+    "description": "found in the post &  share page"
+  },
+  "clickOnConfirm": "Click on \"Confirm Reply\" to confirm that you posted a quick reply.",
+  "@clickOnConfirm": {
+    "description": "found in the post &  share page"
+  },
+  "copyContent": "Copy content and reply on",
+  "@copyContent": {
+    "description": "found in the post &  share page"
+  },
+  "reviewContent": "Review the content below.",
+  "@reviewContent": {
+    "description": "found in the post &  share page"
+  },
+  "quickReplyDesc": "Use our ready-made responses to quickly engage in online discussions about Palestine.",
+  "@quickReplyDesc": {
+    "description": "found in the post &  share page"
   }
 }
