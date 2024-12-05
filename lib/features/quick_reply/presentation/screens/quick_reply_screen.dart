@@ -88,17 +88,17 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
   Widget _buildValueListenableBuilder(TextTheme textTheme) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return SingleChildScrollView(
-      child: BlocBuilder<ReplyBloc, ReplyState>(
-        builder: (context, state) {
-          return ValueListenableBuilder(
-              valueListenable: _selectedSocial,
-              builder: (context, val, _) {
-                return BlocBuilder<PostBloc, PostState>(
-                  builder: (context, postState) {
-                    return Container(
-                      color: Colors.white,
-                      child: Column(
+    return Container(
+      color: Colors.white,
+      child: SingleChildScrollView(
+        child: BlocBuilder<ReplyBloc, ReplyState>(
+          builder: (context, state) {
+            return ValueListenableBuilder(
+                valueListenable: _selectedSocial,
+                builder: (context, val, _) {
+                  return BlocBuilder<PostBloc, PostState>(
+                    builder: (context, postState) {
+                      return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildMediaSwitch(),
@@ -112,12 +112,12 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
                           _buildVideo(context, colorScheme),
                           _buildSteps(context, postState, val, textTheme)
                         ],
-                      ),
-                    );
-                  },
-                );
-              });
-        },
+                      );
+                    },
+                  );
+                });
+          },
+        ),
       ),
     );
   }
