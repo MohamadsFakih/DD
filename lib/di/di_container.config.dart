@@ -22,6 +22,17 @@ import '../features/post_share/data/source/post_source_impl.dart' as _i854;
 import '../features/post_share/domain/repository/post_repository.dart' as _i732;
 import '../features/post_share/domain/usecase/post_usecase.dart' as _i992;
 import '../features/post_share/presentation/bloc/post_bloc.dart' as _i913;
+import '../features/quick_reply/data/remote/service/reply_service.dart'
+    as _i686;
+import '../features/quick_reply/data/remote/source/reply_source.dart' as _i350;
+import '../features/quick_reply/data/remote/source/reply_source_impl.dart'
+    as _i434;
+import '../features/quick_reply/data/repository/reply_repository_impl.dart'
+    as _i42;
+import '../features/quick_reply/domain/repository/reply_repository.dart'
+    as _i956;
+import '../features/quick_reply/domain/usecase/reply_usecase.dart' as _i464;
+import '../features/quick_reply/presentation/bloc/reply_bloc.dart' as _i27;
 import 'app_module.dart' as _i460;
 
 const String _dev = 'dev';
@@ -49,18 +60,26 @@ _i174.GetIt $initGetIt(
     registerFor: {_dev},
   );
   gh.factory<_i906.PostService>(() => _i906.PostService(gh<_i361.Dio>()));
+  gh.factory<_i686.ReplyService>(() => _i686.ReplyService(gh<_i361.Dio>()));
   gh.singleton<String>(
     () => appModule.apiBaseUrl,
     instanceName: 'base_url',
     registerFor: {_prod},
   );
+  gh.factory<_i350.ReplySource>(
+      () => _i434.ReplySourceImpl(gh<_i686.ReplyService>()));
   gh.factory<_i382.PostSource>(
       () => _i854.PostSourceImpl(gh<_i906.PostService>()));
   gh.factory<_i732.PostRepository>(
       () => _i568.PostRepositoryImpl(gh<_i382.PostSource>()));
+  gh.factory<_i956.ReplyRepository>(
+      () => _i42.ReplyRepositoryImpl(gh<_i350.ReplySource>()));
   gh.factory<_i992.PostUseCase>(
       () => _i992.PostUseCase(gh<_i732.PostRepository>()));
   gh.factory<_i913.PostBloc>(() => _i913.PostBloc(gh<_i992.PostUseCase>()));
+  gh.factory<_i464.ReplyUseCase>(
+      () => _i464.ReplyUseCase(gh<_i956.ReplyRepository>()));
+  gh.factory<_i27.ReplyBloc>(() => _i27.ReplyBloc(gh<_i464.ReplyUseCase>()));
   return getIt;
 }
 

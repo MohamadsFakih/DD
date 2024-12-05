@@ -2,9 +2,11 @@ import 'package:digital_defender/core/utils/constants/image_constants.dart';
 import 'package:flutter/material.dart';
 
 class SocialMediaSwitch extends StatefulWidget {
-  const SocialMediaSwitch({super.key, required this.selectedButtonNotifier});
+  const SocialMediaSwitch(
+      {super.key, required this.selectedButtonNotifier, this.onChange});
 
   final ValueNotifier<int> selectedButtonNotifier;
+  final VoidCallback? onChange;
 
   @override
   State<SocialMediaSwitch> createState() => _SocialMediaSwitchState();
@@ -29,6 +31,7 @@ class _SocialMediaSwitchState extends State<SocialMediaSwitch> {
             return GestureDetector(
               onTap: () {
                 widget.selectedButtonNotifier.value = index;
+                widget.onChange?.call();
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),

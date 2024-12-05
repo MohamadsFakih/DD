@@ -12,6 +12,8 @@ import 'package:digital_defender/features/post_share/data/model/get_video_params
 import 'package:digital_defender/features/post_share/presentation/bloc/post_bloc.dart';
 import 'package:digital_defender/features/post_share/presentation/widgets/controls_overlay.dart';
 import 'package:digital_defender/features/post_share/presentation/widgets/fullscreen_player.dart';
+import 'package:digital_defender/features/quick_reply/data/models/reply_params.dart';
+import 'package:digital_defender/features/quick_reply/presentation/bloc/reply_bloc.dart';
 import 'package:digital_defender/features/quick_reply/presentation/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +35,7 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
   XFile? _selectedImage;
   bool startedInitialize = false;
   final PostBloc _postBloc = getIt<PostBloc>();
+  final ReplyBloc _replyBloc = getIt<ReplyBloc>();
 
   @override
   void initState() {
@@ -60,6 +63,7 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: _postBloc),
+        BlocProvider.value(value: _replyBloc),
       ],
       child: MultiBlocListener(listeners: [
         BlocListener<PostBloc, PostState>(listener: (context, state) {
@@ -85,114 +89,141 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return SingleChildScrollView(
-      child: ValueListenableBuilder(
-          valueListenable: _selectedSocial,
-          builder: (context, val, _) {
-            return Container(
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SocialMediaSwitch(
-                      selectedButtonNotifier: _selectedSocial,
-                    ),
-                  ),
-                  const PageTitle(
-                    title:
-                        "Use our ready-made responses to quickly engage in online discussions about Palestine.",
-                    icon: Icons.email,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  BlocBuilder<PostBloc, PostState>(
-                    builder: (context, state) {
-                      return _buildVideo(context, colorScheme);
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        const SectionItem(
-                          number: "1",
-                          title: "Review the content below.",
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        const CustomContainer(
-                          text: "Oggi la mamma di Martina ci cucina qualcosa",
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        SectionItem(
-                          number: "2",
-                          title:
-                              "Click on \"Copy content and Reply on ${getCorrectSocialMediaName(val)}\", then paste the reply.",
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        CommonButton(
-                          text:
-                              "Copy content and reply on ${getCorrectSocialMediaName(val)}",
-                          onTap: () {
-                            openUrl("https://www.google.com");
-                          },
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const SectionItem(
-                          number: "3",
-                          title:
-                              "Click on \"Confirm Reply\" to confirm that you posted a quick reply.",
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        SecondaryButton(
-                          text: "Upload screenshot (optional)",
-                          onTap: () {
-                            pickImage();
-                          },
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        CommonButton(
-                          text: "Confirm Reply",
-                          onTap: () {},
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.orText,
-                          style: textTheme.labelLarge?.copyWith(
-                            color: Colors.black,
+      child: BlocBuilder<ReplyBloc, ReplyState>(
+        builder: (context, state) {
+          return ValueListenableBuilder(
+              valueListenable: _selectedSocial,
+              builder: (context, val, _) {
+                return BlocBuilder<PostBloc, PostState>(
+                  builder: (context, postState) {
+                    return Container(
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildMediaSwitch(),
+                          PageTitle(
+                            title: AppLocalizations.of(context)!.quickReplyDesc,
+                            icon: Icons.email,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        CommonButton(
-                          text: AppLocalizations.of(context)!.getAnotherPost,
-                          backgroundColor: Colors.grey,
-                          textColor: Colors.black,
-                          onTap: () {},
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          _buildVideo(context, colorScheme),
+                          _buildSteps(context, postState, val, textTheme)
+                        ],
+                      ),
+                    );
+                  },
+                );
+              });
+        },
+      ),
+    );
+  }
+
+  Padding _buildSteps(
+      BuildContext context, PostState postState, int val, TextTheme textTheme) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          SectionItem(
+            number: "1",
+            title: AppLocalizations.of(context)!.reviewContent,
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          CustomContainer(
+            text: postState.getVideoResponse.desc,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          SectionItem(
+            number: "2",
+            title:
+                "Click on \"Copy content and Reply on ${getCorrectSocialMediaName(val)}\", then paste the reply.",
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          CommonButton(
+            text:
+                "${AppLocalizations.of(context)!.copyContent} ${getCorrectSocialMediaName(val)}",
+            onTap: () {
+              openUrl(postState.getVideoResponse.webpage);
+            },
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          SectionItem(
+            number: "3",
+            title: AppLocalizations.of(context)!.clickOnConfirm,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          SecondaryButton(
+            text: AppLocalizations.of(context)!.uploadScreenshot,
+            onTap: () {
+              pickImage();
+            },
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          CommonButton(
+            text: AppLocalizations.of(context)!.confirmReply,
+            onTap: () {
+              _replyBloc.add(
+                const QuickReply(
+                  ReplyParams(),
+                ),
+              );
+            },
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Text(
+            AppLocalizations.of(context)!.orText,
+            style: textTheme.labelLarge?.copyWith(
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          CommonButton(
+            text: AppLocalizations.of(context)!.getAnotherPost,
+            backgroundColor: Colors.grey,
+            textColor: Colors.black,
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding _buildMediaSwitch() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SocialMediaSwitch(
+        selectedButtonNotifier: _selectedSocial,
+        onChange: () {
+          _postBloc.add(
+            GetVideo(
+              GetVideoParams(
+                platform: getCorrectSocialMediaName(_selectedSocial.value),
+                type: "QUICK_REPLY",
               ),
-            );
-          }),
+            ),
+          );
+        },
+      ),
     );
   }
 

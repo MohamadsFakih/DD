@@ -26,4 +26,5 @@ class APIConstant {
   ///
   static const String posShare = '${ddPath}post';
   static const String getVideo = '${ddPath}getVideo';
+  static const String quickReply = '${ddPath}quickReply';
 }
