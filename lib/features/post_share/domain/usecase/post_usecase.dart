@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:digital_defender/features/post_share/data/model/get_video_params.dart';
 import 'package:digital_defender/features/post_share/data/model/get_video_response.dart';
 import 'package:digital_defender/features/post_share/data/model/post_params.dart';
 import 'package:digital_defender/features/post_share/domain/repository/post_repository.dart';
@@ -12,6 +13,6 @@ class PostUseCase {
   Future<Either<Error, PostResponse>> postShare(PostParams params) =>
       _postRepository.postShare(params);
 
-  Future<Either<Error, GetVideoResponse>> getVideo() =>
-      _postRepository.getVideo();
+  Future<Either<Error, GetVideoResponse>> getVideo(GetVideoParams params) =>
+      _postRepository.getVideo(params);
 }
