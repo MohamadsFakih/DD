@@ -1,6 +1,6 @@
 import 'package:digital_defender/core/utils/design/color_theme.dart';
 import 'package:digital_defender/di/di_container.dart';
-import 'package:digital_defender/features/default/presentation/screens/default_screen.dart';
+import 'package:digital_defender/features/login/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: theme.light(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const DefaultScreen(),
+      home: const LoginScreen(),
     );
   }
 }

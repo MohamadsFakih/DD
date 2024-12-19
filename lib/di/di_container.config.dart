@@ -21,6 +21,13 @@ import '../features/common/data/repository/common_repository_impl.dart' as _i68;
 import '../features/common/domain/repository/common_repository.dart' as _i608;
 import '../features/common/domain/usecase/common_usecase.dart' as _i996;
 import '../features/common/presentation/bloc/common_bloc.dart' as _i143;
+import '../features/login/data/remote/service/login_service.dart' as _i978;
+import '../features/login/data/remote/source/login_source.dart' as _i486;
+import '../features/login/data/remote/source/login_source_impl.dart' as _i310;
+import '../features/login/data/repository/login_repository_impl.dart' as _i718;
+import '../features/login/domain/repository/login_repository.dart' as _i533;
+import '../features/login/domain/usecase/login_usecase.dart' as _i352;
+import '../features/login/presentation/bloc/login_bloc.dart' as _i1022;
 import '../features/post_share/data/repository/post_repository_impl.dart'
     as _i568;
 import '../features/post_share/data/service/post_service.dart' as _i906;
@@ -69,6 +76,11 @@ _i174.GetIt $initGetIt(
   gh.factory<_i686.ReplyService>(() => _i686.ReplyService(gh<_i361.Dio>()));
   gh.factory<_i906.PostService>(() => _i906.PostService(gh<_i361.Dio>()));
   gh.factory<_i135.CommonService>(() => _i135.CommonService(gh<_i361.Dio>()));
+  gh.factory<_i978.LoginService>(() => _i978.LoginService(gh<_i361.Dio>()));
+  gh.factory<_i486.LoginSource>(
+      () => _i310.LoginSourceImpl(gh<_i978.LoginService>()));
+  gh.factory<_i533.LoginRepository>(() =>
+      _i718.LoginRepositoryImpl(loginDataSource: gh<_i486.LoginSource>()));
   gh.singleton<String>(
     () => appModule.apiBaseUrl,
     instanceName: 'base_url',
@@ -84,6 +96,8 @@ _i174.GetIt $initGetIt(
       () => _i68.CommonRepositoryImpl(gh<_i300.CommonSource>()));
   gh.factory<_i732.PostRepository>(
       () => _i568.PostRepositoryImpl(gh<_i382.PostSource>()));
+  gh.factory<_i352.LoginUseCase>(
+      () => _i352.LoginUseCase(gh<_i533.LoginRepository>()));
   gh.factory<_i956.ReplyRepository>(
       () => _i42.ReplyRepositoryImpl(gh<_i350.ReplySource>()));
   gh.factory<_i992.PostUseCase>(
@@ -93,6 +107,8 @@ _i174.GetIt $initGetIt(
       () => _i464.ReplyUseCase(gh<_i956.ReplyRepository>()));
   gh.factory<_i996.CommonUseCase>(
       () => _i996.CommonUseCase(gh<_i608.CommonRepository>()));
+  gh.factory<_i1022.LoginBloc>(
+      () => _i1022.LoginBloc(gh<_i352.LoginUseCase>()));
   gh.factory<_i143.CommonBloc>(
       () => _i143.CommonBloc(gh<_i996.CommonUseCase>()));
   gh.factory<_i27.ReplyBloc>(() => _i27.ReplyBloc(gh<_i464.ReplyUseCase>()));

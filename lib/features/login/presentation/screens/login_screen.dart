@@ -1,4 +1,8 @@
+import 'package:digital_defender/di/di_container.dart';
+import 'package:digital_defender/features/login/data/models/login_params.dart';
+import 'package:digital_defender/features/login/presentation/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -10,98 +14,111 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
+  final LoginBloc _loginBloc = getIt<LoginBloc>();
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
+    return BlocProvider.value(
+      value: _loginBloc,
+      child: _buildScaffold(context, textTheme, colorScheme),
+    );
+  }
+
+  Scaffold _buildScaffold(
+      BuildContext context, TextTheme textTheme, ColorScheme colorScheme) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            _buildImage(context),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Digital Defender\nSpreading the truth about palestine",
-                  style: textTheme.headlineLarge
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Enter your email to track progress. No password required 👇",
-                            style: textTheme.labelLarge
-                                ?.copyWith(color: Colors.black),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          _buildTextField(textTheme),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          _buildButton(colorScheme, textTheme),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _buildDivider(),
-                              ),
-                              Text(
-                                "Or",
-                                style: textTheme.labelLarge
-                                    ?.copyWith(color: Colors.black),
-                              ),
-                              Expanded(
-                                child: _buildDivider(),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          SizedBox(
-                            width: 260,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Colors.white, // White background
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  side: const BorderSide(
-                                      color: Colors.black), // Black border
-                                ),
-                              ),
-                              child: Text(
-                                "ACCESS ANONYMOUSLY",
-                                style: textTheme.labelLarge?.copyWith(
-                                    color: Colors.black), // Black text
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          _buildImage(context),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Digital Defender\nSpreading the truth about palestine",
+                style: textTheme.headlineLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Enter your email to track progress. No password required 👇",
+                          style: textTheme.labelLarge
+                              ?.copyWith(color: Colors.black),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        _buildTextField(textTheme),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        BlocBuilder<LoginBloc, LoginState>(
+                          builder: (context, state) {
+                            return _buildButton(colorScheme, textTheme, state);
+                          },
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildDivider(),
+                            ),
+                            Text(
+                              "Or",
+                              style: textTheme.labelLarge
+                                  ?.copyWith(color: Colors.black),
+                            ),
+                            Expanded(
+                              child: _buildDivider(),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        SizedBox(
+                          width: 260,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white, // White background
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                side: const BorderSide(
+                                    color: Colors.black), // Black border
                               ),
                             ),
+                            child: Text(
+                              "ACCESS ANONYMOUSLY",
+                              style: textTheme.labelLarge
+                                  ?.copyWith(color: Colors.black), // Black text
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
-          ],
-        ));
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   SizedBox _buildImage(BuildContext context) {
@@ -117,21 +134,36 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  SizedBox _buildButton(ColorScheme colorScheme, TextTheme textTheme) {
+  SizedBox _buildButton(
+      ColorScheme colorScheme, TextTheme textTheme, LoginState state) {
     return SizedBox(
       width: 160,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          _loginBloc.add(
+            Login(
+              LoginParams(email: _emailController.text),
+            ),
+          );
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        child: Text(
-          "GET STARTED",
-          style: textTheme.labelLarge?.copyWith(color: colorScheme.onSurface),
-        ),
+        child: state.isLoading
+            ? const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              )
+            : Text(
+                "GET STARTED",
+                style: textTheme.labelLarge
+                    ?.copyWith(color: colorScheme.onSurface),
+              ),
       ),
     );
   }
