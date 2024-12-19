@@ -15,16 +15,17 @@ class APIConstant {
 
   /// The dev url for the domain.
   ///
-  static const String devUrl = 'https://professor.proxy.beeceptor.com/';
+  static const String devUrl = 'http://localhost:5142';
 
   ///
   ///
   static const String ddPath = 'dd/api/v1/';
   static const String userPath = 'api/User/';
+  static const String v1 = '/api/v1/';
 
   /// The route for the dashboard API.
   ///
   static const String posShare = '${ddPath}post';
-  static const String getVideo = '${ddPath}getVideo';
+  static const String getVideo = '${v1}social-embed';
   static const String quickReply = '${ddPath}quickReply';
 }

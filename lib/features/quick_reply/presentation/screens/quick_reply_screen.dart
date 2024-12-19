@@ -1,23 +1,19 @@
 import 'package:digital_defender/core/utils/constants/app_constants.dart';
 import 'package:digital_defender/core/utils/constants/constant_functions.dart';
 import 'package:digital_defender/di/di_container.dart';
+import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
 import 'package:digital_defender/features/common/presentation/widgets/common_button.dart';
-import 'package:digital_defender/features/common/presentation/widgets/custom_loading.dart';
 import 'package:digital_defender/features/common/presentation/widgets/page_title.dart';
 import 'package:digital_defender/features/common/presentation/widgets/secondary_button.dart';
 import 'package:digital_defender/features/common/presentation/widgets/section_item.dart';
 import 'package:digital_defender/features/common/presentation/widgets/social_media_switch.dart';
-import 'package:digital_defender/features/common/presentation/widgets/time_indicator.dart';
-import 'package:digital_defender/features/post_share/data/model/get_video_params.dart';
-import 'package:digital_defender/features/post_share/presentation/bloc/post_bloc.dart';
-import 'package:digital_defender/features/post_share/presentation/widgets/controls_overlay.dart';
-import 'package:digital_defender/features/post_share/presentation/widgets/fullscreen_player.dart';
 import 'package:digital_defender/features/quick_reply/data/models/reply_params.dart';
 import 'package:digital_defender/features/quick_reply/presentation/bloc/reply_bloc.dart';
 import 'package:digital_defender/features/quick_reply/presentation/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_social_embeds/social_embed_webview.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
@@ -34,19 +30,14 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
   final ValueNotifier<int> _selectedSocial = ValueNotifier(0);
   XFile? _selectedImage;
   bool startedInitialize = false;
-  final PostBloc _postBloc = getIt<PostBloc>();
+  final CommonBloc _commonBloc = getIt<CommonBloc>();
   final ReplyBloc _replyBloc = getIt<ReplyBloc>();
 
   @override
   void initState() {
     super.initState();
-    _postBloc.add(
-      GetVideo(
-        GetVideoParams(
-          platform: getCorrectSocialMediaName(_selectedSocial.value),
-          type: "QUICK_REPLY",
-        ),
-      ),
+    _commonBloc.add(
+      GetVideo(1, _selectedSocial.value),
     );
   }
 
@@ -62,23 +53,15 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: _postBloc),
+        BlocProvider.value(value: _commonBloc),
         BlocProvider.value(value: _replyBloc),
       ],
       child: MultiBlocListener(listeners: [
-        BlocListener<PostBloc, PostState>(listener: (context, state) {
-          if (state.getVideoResponse.link.isNotEmpty) {
+        BlocListener<CommonBloc, CommonState>(listener: (context, state) {
+          if (state.videoResponse.link.isNotEmpty) {
             setState(() {
               startedInitialize = true;
             });
-            logger.d(state.getVideoResponse.link);
-            _controller = VideoPlayerController.networkUrl(
-              Uri.parse(
-                state.getVideoResponse.link,
-              ),
-            )..initialize().then((_) {
-                setState(() {});
-              });
           }
         })
       ], child: _buildValueListenableBuilder(textTheme)),
@@ -96,7 +79,7 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
             return ValueListenableBuilder(
                 valueListenable: _selectedSocial,
                 builder: (context, val, _) {
-                  return BlocBuilder<PostBloc, PostState>(
+                  return BlocBuilder<CommonBloc, CommonState>(
                     builder: (context, postState) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +92,11 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
                           const SizedBox(
                             height: 16,
                           ),
-                          _buildVideo(context, colorScheme),
+                          _buildVideo(
+                              context,
+                              colorScheme,
+                              postState.videoResponse.embed,
+                              postState.videoResponse.socialType),
                           _buildSteps(context, postState, val, textTheme)
                         ],
                       );
@@ -122,8 +109,8 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
     );
   }
 
-  Padding _buildSteps(
-      BuildContext context, PostState postState, int val, TextTheme textTheme) {
+  Padding _buildSteps(BuildContext context, CommonState postState, int val,
+      TextTheme textTheme) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -136,7 +123,7 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
             height: 4,
           ),
           CustomContainer(
-            text: postState.getVideoResponse.desc,
+            text: postState.videoResponse.content,
           ),
           const SizedBox(
             height: 16,
@@ -153,7 +140,7 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
             text:
                 "${AppLocalizations.of(context)!.copyContent} ${getCorrectSocialMediaName(val)}",
             onTap: () {
-              openUrl(postState.getVideoResponse.webpage);
+              openUrl(postState.videoResponse.link);
             },
           ),
           const SizedBox(
@@ -214,13 +201,8 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
       child: SocialMediaSwitch(
         selectedButtonNotifier: _selectedSocial,
         onChange: () {
-          _postBloc.add(
-            GetVideo(
-              GetVideoParams(
-                platform: getCorrectSocialMediaName(_selectedSocial.value),
-                type: "QUICK_REPLY",
-              ),
-            ),
+          _commonBloc.add(
+            GetVideo(1, _selectedSocial.value),
           );
         },
       ),
@@ -233,65 +215,18 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
     logger.d(_selectedImage?.path);
   }
 
-  Widget _buildVideo(BuildContext context, ColorScheme colorScheme) {
-    return startedInitialize
-        ? Column(
-            children: [
-              AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    VideoPlayer(_controller),
-                    ControlsOverlay(controller: _controller),
-                    VideoProgressIndicator(
-                      _controller,
-                      allowScrubbing: true,
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                    ),
-                    Positioned(
-                      bottom: 10,
-                      left: 10,
-                      child: TimeIndicator(controller: _controller),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ValueListenableBuilder(
-                    valueListenable: _controller,
-                    builder: (context, VideoPlayerValue value, child) {
-                      return IconButton(
-                        icon: Icon(
-                          value.isPlaying ? Icons.pause : Icons.play_arrow,
-                        ),
-                        onPressed: () {
-                          value.isPlaying
-                              ? _controller.pause()
-                              : _controller.play();
-                        },
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.fullscreen),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              FullScreenVideoPlayer(controller: _controller),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
-          )
-        : const CustomLoading();
+  Widget _buildVideo(BuildContext context, ColorScheme colorScheme, String link,
+      int socialType) {
+    if (link.isNotEmpty) {
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: 300,
+        child: SocialEmbed(
+          htmlBody: link,
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 }
