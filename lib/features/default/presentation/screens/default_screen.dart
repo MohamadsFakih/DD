@@ -1,6 +1,7 @@
 import 'package:digital_defender/core/utils/constants/secure_storage.dart';
 import 'package:digital_defender/di/di_container.dart';
 import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
+import 'package:digital_defender/features/contribute/presentation/screens/contribute_screen.dart';
 import 'package:digital_defender/features/login/presentation/screens/login_screen.dart';
 import 'package:digital_defender/features/post_share/presentation/screens/post_share_screen.dart';
 import 'package:digital_defender/features/quick_reply/presentation/screens/quick_reply_screen.dart';
@@ -28,9 +29,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
       const Center(
         child: Text("screen3"),
       ),
-      const Center(
-        child: Text("screen4"),
-      ),
+      const ContributeScreen(),
     ];
   }
 

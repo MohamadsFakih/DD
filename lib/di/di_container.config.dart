@@ -21,6 +21,18 @@ import '../features/common/data/repository/common_repository_impl.dart' as _i68;
 import '../features/common/domain/repository/common_repository.dart' as _i608;
 import '../features/common/domain/usecase/common_usecase.dart' as _i996;
 import '../features/common/presentation/bloc/common_bloc.dart' as _i143;
+import '../features/contribute/data/remote/service/contribute_service.dart'
+    as _i94;
+import '../features/contribute/data/remote/source/contribute_source.dart'
+    as _i364;
+import '../features/contribute/data/remote/source/contribute_source_impl.dart'
+    as _i470;
+import '../features/contribute/data/repository/contribute_repository_impl.dart'
+    as _i1012;
+import '../features/contribute/domain/repository/contribute_repository.dart'
+    as _i460;
+import '../features/contribute/domain/usecase/contribute_usecase.dart' as _i550;
+import '../features/contribute/presentation/bloc/contribute_bloc.dart' as _i907;
 import '../features/login/data/remote/service/login_service.dart' as _i978;
 import '../features/login/data/remote/source/login_source.dart' as _i486;
 import '../features/login/data/remote/source/login_source_impl.dart' as _i310;
@@ -74,10 +86,12 @@ _i174.GetIt $initGetIt(
     instanceName: 'base_url',
     registerFor: {_dev},
   );
-  gh.factory<_i686.ReplyService>(() => _i686.ReplyService(gh<_i361.Dio>()));
-  gh.factory<_i906.PostService>(() => _i906.PostService(gh<_i361.Dio>()));
   gh.factory<_i135.CommonService>(() => _i135.CommonService(gh<_i361.Dio>()));
   gh.factory<_i978.LoginService>(() => _i978.LoginService(gh<_i361.Dio>()));
+  gh.factory<_i906.PostService>(() => _i906.PostService(gh<_i361.Dio>()));
+  gh.factory<_i686.ReplyService>(() => _i686.ReplyService(gh<_i361.Dio>()));
+  gh.factory<_i94.ContributeService>(
+      () => _i94.ContributeService(gh<_i361.Dio>()));
   gh.factory<_i486.LoginSource>(
       () => _i310.LoginSourceImpl(gh<_i978.LoginService>()));
   gh.factory<_i533.LoginRepository>(() =>
@@ -89,6 +103,8 @@ _i174.GetIt $initGetIt(
   );
   gh.factory<_i300.CommonSource>(
       () => _i619.CommonSourceImpl(gh<_i135.CommonService>()));
+  gh.factory<_i364.ContributeSource>(
+      () => _i470.ContributeSourceImpl(gh<_i94.ContributeService>()));
   gh.factory<_i350.ReplySource>(
       () => _i434.ReplySourceImpl(gh<_i686.ReplyService>()));
   gh.factory<_i382.PostSource>(
@@ -97,6 +113,8 @@ _i174.GetIt $initGetIt(
       () => _i68.CommonRepositoryImpl(gh<_i300.CommonSource>()));
   gh.factory<_i732.PostRepository>(
       () => _i568.PostRepositoryImpl(gh<_i382.PostSource>()));
+  gh.factory<_i460.ContributeRepository>(
+      () => _i1012.ContributeRepositoryImpl(gh<_i364.ContributeSource>()));
   gh.factory<_i352.LoginUseCase>(
       () => _i352.LoginUseCase(gh<_i533.LoginRepository>()));
   gh.factory<_i956.ReplyRepository>(
@@ -110,6 +128,10 @@ _i174.GetIt $initGetIt(
       () => _i996.CommonUseCase(gh<_i608.CommonRepository>()));
   gh.factory<_i1022.LoginBloc>(
       () => _i1022.LoginBloc(gh<_i352.LoginUseCase>()));
+  gh.factory<_i550.ContributeUseCase>(
+      () => _i550.ContributeUseCase(gh<_i460.ContributeRepository>()));
+  gh.factory<_i907.ContributeBloc>(
+      () => _i907.ContributeBloc(gh<_i550.ContributeUseCase>()));
   gh.factory<_i27.ReplyBloc>(() => _i27.ReplyBloc(gh<_i464.ReplyUseCase>()));
   return getIt;
 }

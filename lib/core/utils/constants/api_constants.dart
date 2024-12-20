@@ -29,4 +29,5 @@ class APIConstant {
   static const String getVideo = '${v1}social-embed';
   static const String quickReply = '${ddPath}quickReply';
   static const String login = '${v1}login';
+  static const String sendContent = '${v1}send-content';
 }
