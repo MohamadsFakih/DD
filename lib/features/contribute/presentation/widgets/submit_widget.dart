@@ -2,14 +2,17 @@ import 'package:digital_defender/features/common/presentation/widgets/common_but
 import 'package:flutter/material.dart';
 
 class SubmitWidget extends StatelessWidget {
-  const SubmitWidget(
-      {super.key,
-      required this.controller,
-      required this.title,
-      required this.desc});
+  const SubmitWidget({
+    super.key,
+    required this.controller,
+    required this.title,
+    required this.desc,
+    this.onTap,
+  });
   final TextEditingController controller;
   final String title;
   final String desc;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,13 @@ class SubmitWidget extends StatelessWidget {
           _buildTextField(textTheme, controller),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: CommonButton(text: "Submit", onTap: () {}),
+            child: CommonButton(
+                text: "Submit",
+                onTap: () {
+                  if (onTap != null) {
+                    onTap!.call();
+                  }
+                }),
           )
         ],
       ),

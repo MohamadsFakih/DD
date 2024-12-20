@@ -15,122 +15,6 @@
   "@logout": {
     "description": "The text used for logout button"
   },
-  "forgotPassword": "هل نسيت كلمة المرور؟",
-  "@forgotPassword": {
-    "description": "The text used for forget password"
-  },
-  "wrongUsernameOrPassword": "اسم المستخدم أو كلمة المرور غير صحيحة",
-  "@wrongUsernameOrPassword": {
-    "description": "The text used for wrong password/username server error"
-  },
-  "enterUsername": "الّرجاء إدخال اسم المستخدم",
-  "@enterUsername": {
-    "description": "The text used for empty username error"
-  },
-  "enterPassword": "الرّجاء إدخال كلمة المرور",
-  "@enterPassword": {
-    "description": "The text used for empty password error"
-  },
-  "shortPassword": "الحدّ الأدنى لكلمة المرور هو 8 أحرف",
-  "@shortPassword": {
-    "description": "The text used for empty password error"
-  },
-  "genericErrorMessage": "حصل خطأ ما! الرّجاء إعادة المحاولة",
-  "@genericErrorMessage": {
-    "description": "The text used for generic error message"
-  },
-  "retryAgain": "الرّجاء إعادة المحاولة",
-  "@retryAgain": {
-    "description": "The text used for generic error message"
-  },
-  "pleaseRetryAgain": "يُرجى المحاولة مرة أخرى لاحقًا",
-  "@pleaseRetryAgain": {
-    "description": "The text used for generic error message"
-  },
-  "rememberMe": "احفظ بياناتي",
-  "@rememberMe": {
-    "description": "The text used for remember password"
-  },
-  "ok": "حسنًا!",
-  "@ok": {
-    "description": "The text used for ok label"
-  },
-  "privacyPolicyTitle": "سياسة الخصوصية",
-  "@privacyPolicyTitle": {
-    "description": "The text used for privacy policy label"
-  },
-  "showAll": "إظهار الكل",
-  "@showAll": {
-    "description": "The text used for show all label"
-  },
-  "home": "الرئيسة",
-  "@home": {
-    "description": "The text used for home label"
-  },
-  "library": "المكتبة",
-  "@library": {
-    "description": "The text used for library label"
-  },
-  "search": "بحث",
-  "@search": {
-    "description": "The text used for search label"
-  },
-  "profile": "الملف الشخصي",
-  "@profile": {
-    "description": "The text used for profile label"
-  },
-  "mySaawt": "صوتي",
-  "@mySaawt": {
-    "description": "The text used for my Saawt label"
-  },
-  "audioBooks": "كتب صوتية",
-  "@audioBooks": {
-    "description": "The text used for my Audio Books label"
-  },
-  "channels": "قنوات",
-  "@channels": {
-    "description": "The text used for my Channels label"
-  },
-  "podcasts": "بث الصوتي",
-  "@podcasts": {
-    "description": "The text used for my Podcasts label"
-  },
-  "trendingPodcasts": "بث صوتي رائج",
-  "@trendingPodcasts": {
-    "description": "The text used for my Trending Podcasts label"
-  },
-  "continueListening": "متابعة الاستماع",
-  "@continueListening": {
-    "description": "The text used for my Continue Listening label"
-  },
-  "suggestedForYou": "مقترح لك",
-  "@suggestedForYou": {
-    "description": "The text used for my Suggested for you label"
-  },
-  "recommendedChannels": "قنوات مقترحة",
-  "@recommendedChannels": {
-    "description": "The text used for my Recommended Channels label"
-  },
-  "checkInternetConnection": "الرّجاء التّحقّق من اتّصال الجهاز بشبكة الإنترنت والمحاولة لاحقًا",
-  "@checkInternetConnection": {
-    "description": "The text used for check internet connection label text"
-  },
-  "retry": "إعادة المحاولة",
-  "@retry": {
-    "description": "The text used for retry label text"
-  },
-  "discoverMore": "اكتشف المزيد",
-  "@discoverMore": {
-    "description": "The text used for discover more text on buttons"
-  },
-  "noDownloadsYet": "لا تنزيلات حتى الآن",
-  "@noDownloadsYet": {
-    "description": "The text used to display no downloads text"
-  },
-  "noDownloadsDescription": "استكشف المحتوى المفضل لديك وقم بتنزيله واستمتع به، كل ذلك في مكان واحد.",
-  "@noDownloadsDescription": {
-    "description": "The text used to display no downloads text"
-  },
   "name": "الاسم",
   "email": "البريد الإلكتروني",
   "error": "خطأ",
@@ -156,5 +40,18 @@
   "clickOnConfirm": "انقر فوق \\\"تأكيد الرد\\\" لتأكيد أنك قمت بإرسال رد سريع.",
   "copyContent": "انسخ المحتوى ثم قم بالرد",
   "reviewContent": "قم بمراجعة المحتوى أدناه.",
-  "quickReplyDesc": "استخدم ردودنا الجاهزة للمشاركة بسرعة في المناقشات عبر الإنترنت حول فلسطين."
+  "quickReplyDesc": "استخدم ردودنا الجاهزة للمشاركة بسرعة في المناقشات عبر الإنترنت حول فلسطين.",
+  "submitInspiringContent": "أرسل محتوى ملهمًا وإيجابيًا عن فلسطين لمراجعتنا ومشاركتنا المحتملة.",
+  "reportAnyNegative": "قم بالإبلاغ عن أي محتوى سلبي أو مضلل حول فلسطين لتقييمنا واتخاذ الإجراءات اللازمة.",
+  "submit": "تأكيد",
+  "report": "بلغ",
+  "contributeDesc": "ساهم في الدفاع عن فلسطين، شارك محتوى إيجابي أو أبلغ عن محتوى مزيف",
+  "videoUnavailable": "الفيديو غير متاح",
+  "videoDoesNotExist": "ربما لم يعد هذا الفيديو موجودًا، أو ليس لديك إذن بمشاهدته.",
+  "learMore": "يتعلم أكثر",
+  "content": "المحتوى",
+  "postAndShare": "نشر ومشاركة",
+  "quickReply": "الرد السريع",
+  "reportAndProtect": "الإبلاغ والحماية",
+  "contribute": "ساهم"
 }

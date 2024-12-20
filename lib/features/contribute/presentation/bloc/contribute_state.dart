@@ -4,5 +4,6 @@ part of 'contribute_bloc.dart';
 class ContributeState with _$ContributeState {
   const factory ContributeState.initial({
     @Default(false) bool isLoading,
+    @Default(SendContentResponse()) SendContentResponse sendContentResponse,
   }) = _Initial;
 }

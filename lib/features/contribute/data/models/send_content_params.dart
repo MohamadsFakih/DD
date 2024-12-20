@@ -18,3 +18,15 @@ class SendContentParams with _$SendContentParams {
   factory SendContentParams.fromJson(Map<String, dynamic> json) =>
       _$SendContentParamsFromJson(json);
 }
+
+@freezed
+class SendContentResponse with _$SendContentResponse {
+  const factory SendContentResponse({
+    @Default(false)bool success,
+  }) = _SendContentResponse;
+
+
+
+  factory SendContentResponse.fromJson(Map<String, dynamic> json) =>
+      _$SendContentResponseFromJson(json);
+}

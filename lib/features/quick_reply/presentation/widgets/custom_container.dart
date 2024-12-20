@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomContainer extends StatelessWidget {
   const CustomContainer({super.key, required this.text});
@@ -18,7 +19,7 @@ class CustomContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Content:',
+            '${AppLocalizations.of(context)!.content}:',
             style: textTheme.titleMedium?.copyWith(color: Colors.black),
           ),
           const SizedBox(height: 8.0),

@@ -8,6 +8,7 @@ import 'package:digital_defender/features/common/presentation/widgets/page_title
 import 'package:digital_defender/features/common/presentation/widgets/secondary_button.dart';
 import 'package:digital_defender/features/common/presentation/widgets/section_item.dart';
 import 'package:digital_defender/features/common/presentation/widgets/social_media_switch.dart';
+import 'package:digital_defender/features/common/presentation/widgets/video_unavailable.dart';
 import 'package:digital_defender/features/quick_reply/data/models/reply_params.dart';
 import 'package:digital_defender/features/quick_reply/presentation/bloc/reply_bloc.dart';
 import 'package:digital_defender/features/quick_reply/presentation/widgets/custom_container.dart';
@@ -243,43 +244,7 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
         ),
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          height: 400,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Video Unavailable",
-                style: textTheme.headlineSmall
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
-                child: Text(
-                  "This video may no longer exist, or you don't have permission to view it.",
-                  textAlign: TextAlign.center,
-                  style: textTheme.titleMedium,
-                ),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Text(
-                "Learn more",
-                style: textTheme.labelLarge?.copyWith(
-                    color: Colors.white, fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-        ),
-      );
+      return const VideoUnavailable();
     }
   }
 }

@@ -8,6 +8,7 @@ import 'package:digital_defender/features/quick_reply/presentation/screens/quick
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DefaultScreen extends StatefulWidget {
   const DefaultScreen({super.key});
@@ -115,28 +116,28 @@ class _DefaultScreenState extends State<DefaultScreen> {
     return [
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.share),
-        title: ("Post & Share"),
+        title: (AppLocalizations.of(context)!.postAndShare),
         activeColorPrimary: Colors.green,
         inactiveColorPrimary: CupertinoColors.systemGrey,
         scrollController: _scrollController1,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.email),
-        title: ("Quick Reply"),
+        title: (AppLocalizations.of(context)!.quickReply),
         activeColorPrimary: Colors.green,
         inactiveColorPrimary: CupertinoColors.systemGrey,
         scrollController: _scrollController2,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.info_circle_fill),
-        title: ("Report & Protect"),
+        title: (AppLocalizations.of(context)!.reportAndProtect),
         activeColorPrimary: Colors.green,
         inactiveColorPrimary: CupertinoColors.systemGrey,
         scrollController: _scrollController3,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.add),
-        title: ("Contribute"),
+        title: (AppLocalizations.of(context)!.contribute),
         activeColorPrimary: Colors.green,
         inactiveColorPrimary: CupertinoColors.systemGrey,
         scrollController: _scrollController3,
