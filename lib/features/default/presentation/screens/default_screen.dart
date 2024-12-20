@@ -28,6 +28,9 @@ class _DefaultScreenState extends State<DefaultScreen> {
       const Center(
         child: Text("screen3"),
       ),
+      const Center(
+        child: Text("screen4"),
+      ),
     ];
   }
 
@@ -128,6 +131,13 @@ class _DefaultScreenState extends State<DefaultScreen> {
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.info_circle_fill),
         title: ("Report & Protect"),
+        activeColorPrimary: Colors.green,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+        scrollController: _scrollController3,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(CupertinoIcons.add),
+        title: ("Contribute"),
         activeColorPrimary: Colors.green,
         inactiveColorPrimary: CupertinoColors.systemGrey,
         scrollController: _scrollController3,
