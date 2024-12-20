@@ -1,3 +1,7 @@
+import 'package:digital_defender/core/utils/constants/secure_storage.dart';
+import 'package:digital_defender/di/di_container.dart';
+import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
+import 'package:digital_defender/features/login/presentation/screens/login_screen.dart';
 import 'package:digital_defender/features/post_share/presentation/screens/post_share_screen.dart';
 import 'package:digital_defender/features/quick_reply/presentation/screens/quick_reply_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,12 +50,23 @@ class _DefaultScreenState extends State<DefaultScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: [
-                const Text("Anonymous"),
+                Text(
+                  getIt<CommonBloc>().state.loginResponse.email,
+                  style: textTheme.titleSmall,
+                ),
                 const SizedBox(
                   width: 8,
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    SecureStorage.clearLoginResponse();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
+                  },
                   child: const Icon(
                     Icons.logout,
                     color: Colors.white,

@@ -68,6 +68,7 @@ _i174.GetIt $initGetIt(
   gh.singleton<_i409.GlobalKey<_i409.NavigatorState>>(
       () => appModule.navigatorKey);
   gh.lazySingleton<_i361.Dio>(() => appModule.dio);
+  gh.lazySingleton<_i143.CommonBloc>(() => appModule.playerBloc);
   gh.singleton<String>(
     () => appModule.apiBaseDevUrl,
     instanceName: 'base_url',
@@ -109,8 +110,6 @@ _i174.GetIt $initGetIt(
       () => _i996.CommonUseCase(gh<_i608.CommonRepository>()));
   gh.factory<_i1022.LoginBloc>(
       () => _i1022.LoginBloc(gh<_i352.LoginUseCase>()));
-  gh.factory<_i143.CommonBloc>(
-      () => _i143.CommonBloc(gh<_i996.CommonUseCase>()));
   gh.factory<_i27.ReplyBloc>(() => _i27.ReplyBloc(gh<_i464.ReplyUseCase>()));
   return getIt;
 }

@@ -102,17 +102,26 @@ class _PostShareScreenState extends State<PostShareScreen> {
                       ? const CustomLoading()
                       : BlocBuilder<CommonBloc, CommonState>(
                           builder: (context, commonState) {
-                            return _buildVideo(
-                                context,
-                                colorScheme,
-                                commonState.videoResponse.embed,
-                                commonState.videoResponse.socialType);
+                            return Column(
+                              children: [
+                                commonState.isLoading
+                                    ? const CustomLoading()
+                                    : _buildVideo(
+                                        context,
+                                        colorScheme,
+                                        commonState.videoResponse.embed,
+                                        commonState.videoResponse.socialType,
+                                        textTheme,
+                                      ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                if (commonState.videoResponse.embed.isNotEmpty)
+                                  _buildSections(context, state, textTheme),
+                              ],
+                            );
                           },
                         ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  _buildSections(context, state, textTheme),
                 ],
               );
             },
@@ -220,17 +229,56 @@ class _PostShareScreenState extends State<PostShareScreen> {
   }
 
   Widget _buildVideo(BuildContext context, ColorScheme colorScheme, String link,
-      int socialType) {
+      int socialType, TextTheme textTheme) {
     if (link.isNotEmpty) {
-      return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: 300,
-        child: SocialEmbed(
-          htmlBody: link,
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: 750,
+          child: SocialEmbed(
+            htmlBody: link,
+          ),
         ),
       );
     } else {
-      return Container();
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          height: 400,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Video Unavailable",
+                style: textTheme.headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
+                child: Text(
+                  "This video may no longer exist, or you don't have permission to view it.",
+                  textAlign: TextAlign.center,
+                  style: textTheme.titleMedium,
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                "Learn more",
+                style: textTheme.labelLarge?.copyWith(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+        ),
+      );
     }
   }
 }

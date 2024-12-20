@@ -1,3 +1,5 @@
+import 'package:digital_defender/di/di_container.dart';
+import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
 import 'package:dio/dio.dart';
 
 class AuthInterceptor extends Interceptor {
@@ -6,7 +8,8 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    options.headers['UserGuid'] = "6304049b-cc8b-4f5f-a7a0-1354b80dafa2";
+    final userGuid = getIt<CommonBloc>().state.loginResponse.guid;
+    options.headers['UserGuid'] = userGuid;
     super.onRequest(options, handler);
   }
 }

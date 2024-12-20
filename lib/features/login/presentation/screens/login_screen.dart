@@ -1,4 +1,5 @@
 import 'package:digital_defender/di/di_container.dart';
+import 'package:digital_defender/features/default/presentation/screens/default_screen.dart';
 import 'package:digital_defender/features/login/data/models/login_params.dart';
 import 'package:digital_defender/features/login/presentation/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return BlocProvider.value(
       value: _loginBloc,
-      child: _buildScaffold(context, textTheme, colorScheme),
+      child: BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state.loginResponse.guid.isNotEmpty) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const DefaultScreen()),
+              (Route<dynamic> route) => false,
+            );
+          }
+        },
+        child: _buildScaffold(context, textTheme, colorScheme),
+      ),
     );
   }
 

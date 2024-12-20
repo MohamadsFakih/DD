@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:digital_defender/core/utils/constants/app_constants.dart';
+import 'package:digital_defender/core/utils/constants/constant_functions.dart';
 import 'package:digital_defender/features/login/data/models/login_params.dart';
 import 'package:digital_defender/features/login/domain/usecase/login_usecase.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -25,7 +26,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final res = await _loginUseCase.login(params);
     res.fold(
       (error) {
-        //TODO add pop up
+        showTopSnackbar(
+          title: "Error",
+          message: "Something went wrong, please try again",
+        );
         logger.d(error);
       },
       (response) {

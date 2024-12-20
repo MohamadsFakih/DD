@@ -3,6 +3,7 @@ import 'package:digital_defender/core/utils/constants/constant_functions.dart';
 import 'package:digital_defender/di/di_container.dart';
 import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
 import 'package:digital_defender/features/common/presentation/widgets/common_button.dart';
+import 'package:digital_defender/features/common/presentation/widgets/custom_loading.dart';
 import 'package:digital_defender/features/common/presentation/widgets/page_title.dart';
 import 'package:digital_defender/features/common/presentation/widgets/secondary_button.dart';
 import 'package:digital_defender/features/common/presentation/widgets/section_item.dart';
@@ -11,6 +12,7 @@ import 'package:digital_defender/features/quick_reply/data/models/reply_params.d
 import 'package:digital_defender/features/quick_reply/presentation/bloc/reply_bloc.dart';
 import 'package:digital_defender/features/quick_reply/presentation/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_social_embeds/social_embed_webview.dart';
@@ -92,12 +94,17 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
                           const SizedBox(
                             height: 16,
                           ),
-                          _buildVideo(
-                              context,
-                              colorScheme,
-                              postState.videoResponse.embed,
-                              postState.videoResponse.socialType),
-                          _buildSteps(context, postState, val, textTheme)
+                          postState.isLoading
+                              ? const CustomLoading()
+                              : _buildVideo(
+                                  context,
+                                  colorScheme,
+                                  postState.videoResponse.embed,
+                                  postState.videoResponse.socialType,
+                                  textTheme,
+                                ),
+                          if (postState.videoResponse.embed.isNotEmpty)
+                            _buildSteps(context, postState, val, textTheme)
                         ],
                       );
                     },
@@ -139,7 +146,10 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
           CommonButton(
             text:
                 "${AppLocalizations.of(context)!.copyContent} ${getCorrectSocialMediaName(val)}",
-            onTap: () {
+            onTap: () async {
+              await Clipboard.setData(
+                ClipboardData(text: postState.videoResponse.content),
+              );
               openUrl(postState.videoResponse.link);
             },
           ),
@@ -188,7 +198,11 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
             text: AppLocalizations.of(context)!.getAnotherPost,
             backgroundColor: Colors.grey,
             textColor: Colors.black,
-            onTap: () {},
+            onTap: () {
+              _commonBloc.add(
+                GetVideo(1, _selectedSocial.value),
+              );
+            },
           ),
         ],
       ),
@@ -216,17 +230,56 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
   }
 
   Widget _buildVideo(BuildContext context, ColorScheme colorScheme, String link,
-      int socialType) {
+      int socialType, TextTheme textTheme) {
     if (link.isNotEmpty) {
-      return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: 300,
-        child: SocialEmbed(
-          htmlBody: link,
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: 750,
+          child: SocialEmbed(
+            htmlBody: link,
+          ),
         ),
       );
     } else {
-      return Container();
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          height: 400,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Video Unavailable",
+                style: textTheme.headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
+                child: Text(
+                  "This video may no longer exist, or you don't have permission to view it.",
+                  textAlign: TextAlign.center,
+                  style: textTheme.titleMedium,
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                "Learn more",
+                style: textTheme.labelLarge?.copyWith(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+        ),
+      );
     }
   }
 }
