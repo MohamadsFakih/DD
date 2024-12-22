@@ -30,4 +30,5 @@ class APIConstant {
   static const String quickReply = '${ddPath}quickReply';
   static const String login = '${v1}login';
   static const String sendContent = '${v1}send-content';
+  static const String sendActivity = '${v1}send-activity';
 }
