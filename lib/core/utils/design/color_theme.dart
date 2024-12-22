@@ -28,7 +28,7 @@ class MaterialTheme {
       surface: Colors.black,
       onSurface: Colors.white,
       onSurfaceVariant: Color(0xff454841),
-      outline: Color(0xff757871),
+      outline: Color(0xffe7e4e4),
       outlineVariant: Color(0xffc5c7bf),
       shadow: Color(0xff000000),
       scrim: Color(0xff000000),

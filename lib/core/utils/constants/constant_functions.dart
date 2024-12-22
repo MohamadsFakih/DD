@@ -1,5 +1,8 @@
 import 'package:digital_defender/core/utils/constants/app_constants.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:path_provider/path_provider.dart';
@@ -96,5 +99,24 @@ Future<void> openUrl(String url) async {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   } else {
     throw 'Could not launch $url';
+  }
+}
+
+void showTopSnackbar({
+  required String title,
+  required String message,
+  Color? backgroundColor,
+  Color? colorText,
+}) {
+  if (!Get.isSnackbarOpen) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: backgroundColor ?? const Color(0xffA7D394),
+      colorText: colorText ?? const Color(0xFF303333),
+      snackPosition: SnackPosition.TOP,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 12,
+    );
   }
 }

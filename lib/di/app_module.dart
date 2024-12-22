@@ -1,6 +1,11 @@
 import 'dart:convert';
 
 import 'package:digital_defender/core/utils/constants/api_constants.dart';
+import 'package:digital_defender/features/common/data/remote/service/common_service.dart';
+import 'package:digital_defender/features/common/data/remote/source/common_source_impl.dart';
+import 'package:digital_defender/features/common/data/repository/common_repository_impl.dart';
+import 'package:digital_defender/features/common/domain/usecase/common_usecase.dart';
+import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -49,6 +54,17 @@ abstract class AppModule {
 
     return dio;
   }
+
+  @lazySingleton
+  CommonBloc get playerBloc => CommonBloc(
+        CommonUseCase(
+          CommonRepositoryImpl(
+            CommonSourceImpl(
+              CommonService(dio),
+            ),
+          ),
+        ),
+      );
 }
 
 // Custom PrettyPrinter to handle JSON formatting

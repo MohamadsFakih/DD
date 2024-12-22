@@ -1,11 +1,8 @@
-import 'package:digital_defender/core/utils/constants/app_constants.dart';
 import 'package:digital_defender/core/utils/constants/constant_functions.dart';
+import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
 import 'package:digital_defender/features/common/presentation/widgets/page_title.dart';
 import 'package:digital_defender/features/common/presentation/widgets/social_media_switch.dart';
-import 'package:digital_defender/features/common/presentation/widgets/time_indicator.dart';
-import 'package:digital_defender/features/post_share/data/model/get_video_params.dart';
-import 'package:digital_defender/features/post_share/presentation/widgets/controls_overlay.dart';
-import 'package:digital_defender/features/post_share/presentation/widgets/fullscreen_player.dart';
+import 'package:digital_defender/features/common/presentation/widgets/video_unavailable.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:digital_defender/di/di_container.dart';
 import 'package:digital_defender/features/common/presentation/widgets/common_button.dart';
@@ -14,6 +11,7 @@ import 'package:digital_defender/features/common/presentation/widgets/section_it
 import 'package:digital_defender/features/post_share/presentation/bloc/post_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_embeds/social_embed_webview.dart';
 import 'package:video_player/video_player.dart';
 
 class PostShareScreen extends StatefulWidget {
@@ -26,6 +24,7 @@ class PostShareScreen extends StatefulWidget {
 class _PostShareScreenState extends State<PostShareScreen> {
   late VideoPlayerController _controller;
   final PostBloc _postBloc = getIt<PostBloc>();
+  final CommonBloc _commonBloc = getIt<CommonBloc>();
   final TextEditingController _linkController = TextEditingController();
   final ValueNotifier<bool> _enabled = ValueNotifier(false);
   bool startedInitialize = false;
@@ -34,12 +33,8 @@ class _PostShareScreenState extends State<PostShareScreen> {
   @override
   void initState() {
     super.initState();
-    _postBloc.add(
-      GetVideo(
-        GetVideoParams(
-            platform: getCorrectSocialMediaName(_selectedSocial.value),
-            type: "POST_SHARE"),
-      ),
+    _commonBloc.add(
+      GetVideo(0, _selectedSocial.value),
     );
   }
 
@@ -53,18 +48,20 @@ class _PostShareScreenState extends State<PostShareScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    return BlocProvider.value(
-      value: _postBloc,
-      child: BlocListener<PostBloc, PostState>(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _commonBloc),
+        BlocProvider.value(value: _postBloc),
+      ],
+      child: BlocListener<CommonBloc, CommonState>(
         listener: (context, state) {
-          if (state.getVideoResponse.link.isNotEmpty) {
+          if (state.videoResponse.attachment.isNotEmpty) {
             setState(() {
               startedInitialize = true;
             });
-            logger.d(state.getVideoResponse.link);
             _controller = VideoPlayerController.networkUrl(
               Uri.parse(
-                state.getVideoResponse.link,
+                state.videoResponse.link,
               ),
             )..initialize().then((_) {
                 setState(() {});
@@ -91,19 +88,41 @@ class _PostShareScreenState extends State<PostShareScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: SocialMediaSwitch(
                       selectedButtonNotifier: _selectedSocial,
+                      onChange: () {
+                        _commonBloc.add(
+                          GetVideo(0, _selectedSocial.value),
+                        );
+                      },
                     ),
                   ),
                   PageTitle(
                     title: AppLocalizations.of(context)!.postShareDesc,
                     icon: Icons.share,
                   ),
-                  state.isVideoLoading
+                  state.isLoading
                       ? const CustomLoading()
-                      : _buildVideo(context, colorScheme),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  _buildSections(context, state, textTheme),
+                      : BlocBuilder<CommonBloc, CommonState>(
+                          builder: (context, commonState) {
+                            return Column(
+                              children: [
+                                commonState.isLoading
+                                    ? const CustomLoading()
+                                    : _buildVideo(
+                                        context,
+                                        colorScheme,
+                                        commonState.videoResponse.embed,
+                                        commonState.videoResponse.socialType,
+                                        textTheme,
+                                      ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                if (commonState.videoResponse.embed.isNotEmpty)
+                                  _buildSections(context, state, textTheme),
+                              ],
+                            );
+                          },
+                        ),
                 ],
               );
             },
@@ -130,7 +149,7 @@ class _PostShareScreenState extends State<PostShareScreen> {
             text: AppLocalizations.of(context)!.downloadContent,
             icon: Icons.download,
             onTap: () {
-              saveVideo(state.getVideoResponse.link);
+              // saveVideo(state..link);
             },
           ),
           const SizedBox(
@@ -182,13 +201,8 @@ class _PostShareScreenState extends State<PostShareScreen> {
             backgroundColor: Colors.grey,
             textColor: Colors.black,
             onTap: () {
-              _postBloc.add(
-                GetVideo(
-                  GetVideoParams(
-                      platform:
-                          getCorrectSocialMediaName(_selectedSocial.value),
-                      type: "POST_SHARE"),
-                ),
+              _commonBloc.add(
+                GetVideo(0, _selectedSocial.value),
               );
             },
           ),
@@ -215,65 +229,21 @@ class _PostShareScreenState extends State<PostShareScreen> {
         });
   }
 
-  Widget _buildVideo(BuildContext context, ColorScheme colorScheme) {
-    return startedInitialize
-        ? Column(
-            children: [
-              AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    VideoPlayer(_controller),
-                    ControlsOverlay(controller: _controller),
-                    VideoProgressIndicator(
-                      _controller,
-                      allowScrubbing: true,
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                    ),
-                    Positioned(
-                      bottom: 10,
-                      left: 10,
-                      child: TimeIndicator(controller: _controller),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ValueListenableBuilder(
-                    valueListenable: _controller,
-                    builder: (context, VideoPlayerValue value, child) {
-                      return IconButton(
-                        icon: Icon(
-                          value.isPlaying ? Icons.pause : Icons.play_arrow,
-                        ),
-                        onPressed: () {
-                          value.isPlaying
-                              ? _controller.pause()
-                              : _controller.play();
-                        },
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.fullscreen),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              FullScreenVideoPlayer(controller: _controller),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
-          )
-        : const CustomLoading();
+  Widget _buildVideo(BuildContext context, ColorScheme colorScheme, String link,
+      int socialType, TextTheme textTheme) {
+    if (link.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: 750,
+          child: SocialEmbed(
+            htmlBody: link,
+          ),
+        ),
+      );
+    } else {
+      return const VideoUnavailable();
+    }
   }
 }

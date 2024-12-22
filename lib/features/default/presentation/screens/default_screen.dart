@@ -1,8 +1,14 @@
+import 'package:digital_defender/core/utils/constants/secure_storage.dart';
+import 'package:digital_defender/di/di_container.dart';
+import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
+import 'package:digital_defender/features/contribute/presentation/screens/contribute_screen.dart';
+import 'package:digital_defender/features/login/presentation/screens/login_screen.dart';
 import 'package:digital_defender/features/post_share/presentation/screens/post_share_screen.dart';
 import 'package:digital_defender/features/quick_reply/presentation/screens/quick_reply_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DefaultScreen extends StatefulWidget {
   const DefaultScreen({super.key});
@@ -24,6 +30,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
       const Center(
         child: Text("screen3"),
       ),
+      const ContributeScreen(),
     ];
   }
 
@@ -46,12 +53,23 @@ class _DefaultScreenState extends State<DefaultScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: [
-                const Text("Anonymous"),
+                Text(
+                  getIt<CommonBloc>().state.loginResponse.email,
+                  style: textTheme.titleSmall,
+                ),
                 const SizedBox(
                   width: 8,
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    SecureStorage.clearLoginResponse();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
+                  },
                   child: const Icon(
                     Icons.logout,
                     color: Colors.white,
@@ -98,21 +116,28 @@ class _DefaultScreenState extends State<DefaultScreen> {
     return [
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.share),
-        title: ("Post & Share"),
+        title: (AppLocalizations.of(context)!.postAndShare),
         activeColorPrimary: Colors.green,
         inactiveColorPrimary: CupertinoColors.systemGrey,
         scrollController: _scrollController1,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.email),
-        title: ("Quick Reply"),
+        title: (AppLocalizations.of(context)!.quickReply),
         activeColorPrimary: Colors.green,
         inactiveColorPrimary: CupertinoColors.systemGrey,
         scrollController: _scrollController2,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.info_circle_fill),
-        title: ("Report & Protect"),
+        title: (AppLocalizations.of(context)!.reportAndProtect),
+        activeColorPrimary: Colors.green,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+        scrollController: _scrollController3,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(CupertinoIcons.add),
+        title: (AppLocalizations.of(context)!.contribute),
         activeColorPrimary: Colors.green,
         inactiveColorPrimary: CupertinoColors.systemGrey,
         scrollController: _scrollController3,

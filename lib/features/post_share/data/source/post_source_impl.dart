@@ -1,5 +1,3 @@
-import 'package:digital_defender/features/post_share/data/model/get_video_params.dart';
-import 'package:digital_defender/features/post_share/data/model/get_video_response.dart';
 import 'package:digital_defender/features/post_share/data/model/post_params.dart';
 import 'package:digital_defender/features/post_share/data/service/post_service.dart';
 import 'package:digital_defender/features/post_share/data/source/post_source.dart';
@@ -12,8 +10,4 @@ class PostSourceImpl implements PostSource {
   @override
   Future<PostResponse> postShare(PostParams model) =>
       _postService.postShare(model);
-
-  @override
-  Future<GetVideoResponse> getVideo(GetVideoParams params) =>
-      _postService.getVideo(params);
 }

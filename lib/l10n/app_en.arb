@@ -327,5 +327,57 @@
   "quickReplyDesc": "Use our ready-made responses to quickly engage in online discussions about Palestine.",
   "@quickReplyDesc": {
     "description": "found in the post &  share page"
+  },
+  "submitInspiringContent": "Submit inspiring and positive content about Palestine for our review and potential sharing.",
+  "@submitInspiringContent": {
+    "description": "found in the contribute page"
+  },
+  "reportAnyNegative": "Report any negative or misleading content about Palestine for our evaluation and action.",
+  "@reportAnyNegative": {
+    "description": "found in the contribute page"
+  },
+  "submit": "Submit",
+  "@submit": {
+    "description": "found in the contribute page"
+  },
+  "report": "Report",
+  "@report": {
+    "description": "found in the contribute page"
+  },
+  "contributeDesc": "Help contribute in defending palestine, share positive content or report fake content",
+  "@contributeDesc": {
+    "description": "found in the contribute page"
+  },
+  "videoUnavailable": "Video Unavailable",
+  "@videoUnavailable": {
+    "description": "found in the contribute page"
+  },
+  "videoDoesNotExist": "This video may no longer exist, or you don't have permission to view it.",
+  "@videoDoesNotExist": {
+    "description": "found in the contribute page"
+  },
+  "learMore": "Learn more",
+  "@learMore": {
+    "description": "found in the contribute page"
+  },
+  "content": "Content",
+  "@content": {
+    "description": "found in the contribute page"
+  },
+  "postAndShare": "Post & Share",
+  "@postAndShare": {
+    "description": "found in the contribute page"
+  },
+  "quickReply": "Quick Reply",
+  "@quickReply": {
+    "description": "found in the contribute page"
+  },
+  "reportAndProtect": "Report & Protect",
+  "@reportAndProtect": {
+    "description": "found in the contribute page"
+  },
+  "contribute": "Contribute",
+  "@contribute": {
+    "description": "found in the contribute page"
   }
 }

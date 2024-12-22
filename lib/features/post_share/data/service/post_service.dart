@@ -1,6 +1,4 @@
 import 'package:digital_defender/core/utils/constants/api_constants.dart';
-import 'package:digital_defender/features/post_share/data/model/get_video_params.dart';
-import 'package:digital_defender/features/post_share/data/model/get_video_response.dart';
 import 'package:digital_defender/features/post_share/data/model/post_params.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
@@ -21,6 +19,4 @@ abstract class PostService {
 
   @POST(APIConstant.posShare)
   Future<PostResponse> postShare(@Body() PostParams model);
-  @GET(APIConstant.getVideo)
-  Future<GetVideoResponse> getVideo(@Body() GetVideoParams params);
 }
