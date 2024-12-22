@@ -1,6 +1,7 @@
 import 'package:digital_defender/core/utils/constants/app_constants.dart';
 import 'package:digital_defender/core/utils/constants/constant_functions.dart';
 import 'package:digital_defender/di/di_container.dart';
+import 'package:digital_defender/features/common/data/models/send_activity_params.dart';
 import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
 import 'package:digital_defender/features/common/presentation/widgets/common_button.dart';
 import 'package:digital_defender/features/common/presentation/widgets/custom_loading.dart';
@@ -9,16 +10,14 @@ import 'package:digital_defender/features/common/presentation/widgets/secondary_
 import 'package:digital_defender/features/common/presentation/widgets/section_item.dart';
 import 'package:digital_defender/features/common/presentation/widgets/social_media_switch.dart';
 import 'package:digital_defender/features/common/presentation/widgets/video_unavailable.dart';
-import 'package:digital_defender/features/quick_reply/data/models/reply_params.dart';
-import 'package:digital_defender/features/quick_reply/presentation/bloc/reply_bloc.dart';
 import 'package:digital_defender/features/quick_reply/presentation/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_social_embeds/social_embed_webview.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class QuickReplyScreen extends StatefulWidget {
   const QuickReplyScreen({super.key});
@@ -34,7 +33,6 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
   XFile? _selectedImage;
   bool startedInitialize = false;
   final CommonBloc _commonBloc = getIt<CommonBloc>();
-  final ReplyBloc _replyBloc = getIt<ReplyBloc>();
 
   @override
   void initState() {
@@ -57,7 +55,6 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: _commonBloc),
-        BlocProvider.value(value: _replyBloc),
       ],
       child: MultiBlocListener(listeners: [
         BlocListener<CommonBloc, CommonState>(listener: (context, state) {
@@ -77,42 +74,38 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
     return Container(
       color: Colors.white,
       child: SingleChildScrollView(
-        child: BlocBuilder<ReplyBloc, ReplyState>(
-          builder: (context, state) {
-            return ValueListenableBuilder(
-                valueListenable: _selectedSocial,
-                builder: (context, val, _) {
-                  return BlocBuilder<CommonBloc, CommonState>(
-                    builder: (context, postState) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildMediaSwitch(),
-                          PageTitle(
-                            title: AppLocalizations.of(context)!.quickReplyDesc,
-                            icon: Icons.email,
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          postState.isLoading
-                              ? const CustomLoading()
-                              : _buildVideo(
-                                  context,
-                                  colorScheme,
-                                  postState.videoResponse.embed,
-                                  postState.videoResponse.socialType,
-                                  textTheme,
-                                ),
-                          if (postState.videoResponse.embed.isNotEmpty)
-                            _buildSteps(context, postState, val, textTheme)
-                        ],
-                      );
-                    },
+        child: ValueListenableBuilder(
+            valueListenable: _selectedSocial,
+            builder: (context, val, _) {
+              return BlocBuilder<CommonBloc, CommonState>(
+                builder: (context, postState) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildMediaSwitch(),
+                      PageTitle(
+                        title: AppLocalizations.of(context)!.quickReplyDesc,
+                        icon: Icons.email,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      postState.isLoading
+                          ? const CustomLoading()
+                          : _buildVideo(
+                              context,
+                              colorScheme,
+                              postState.videoResponse.link,
+                              postState.videoResponse.socialType,
+                              textTheme,
+                            ),
+                      if (postState.videoResponse.link.isNotEmpty)
+                        _buildSteps(context, postState, val, textTheme)
+                    ],
                   );
-                });
-          },
-        ),
+                },
+              );
+            }),
       ),
     );
   }
@@ -176,9 +169,12 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
           CommonButton(
             text: AppLocalizations.of(context)!.confirmReply,
             onTap: () {
-              _replyBloc.add(
-                const QuickReply(
-                  ReplyParams(),
+              _commonBloc.add(
+                SendActivity(
+                  SendActivityParams(
+                    socialType: _selectedSocial.value,
+                    type: 1,
+                  ),
                 ),
               );
             },
@@ -233,13 +229,33 @@ class _QuickReplyScreenState extends State<QuickReplyScreen> {
   Widget _buildVideo(BuildContext context, ColorScheme colorScheme, String link,
       int socialType, TextTheme textTheme) {
     if (link.isNotEmpty) {
+      final controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onProgress: (int progress) {
+              // Update loading bar.
+            },
+            onPageStarted: (String url) {},
+            onPageFinished: (String url) {},
+            onHttpError: (HttpResponseError error) {},
+            onWebResourceError: (WebResourceError error) {},
+            onNavigationRequest: (NavigationRequest request) {
+              if (request.url.startsWith('https://www.youtube.com/')) {
+                return NavigationDecision.prevent;
+              }
+              return NavigationDecision.navigate;
+            },
+          ),
+        )
+        ..loadRequest(Uri.parse(link));
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 750,
-          child: SocialEmbed(
-            htmlBody: link,
+          child: WebViewWidget(
+            controller: controller,
           ),
         ),
       );

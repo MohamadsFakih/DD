@@ -1,4 +1,5 @@
 import 'package:digital_defender/core/utils/constants/constant_functions.dart';
+import 'package:digital_defender/features/common/data/models/send_activity_params.dart';
 import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
 import 'package:digital_defender/features/common/presentation/widgets/page_title.dart';
 import 'package:digital_defender/features/common/presentation/widgets/social_media_switch.dart';
@@ -8,11 +9,10 @@ import 'package:digital_defender/di/di_container.dart';
 import 'package:digital_defender/features/common/presentation/widgets/common_button.dart';
 import 'package:digital_defender/features/common/presentation/widgets/custom_loading.dart';
 import 'package:digital_defender/features/common/presentation/widgets/section_item.dart';
-import 'package:digital_defender/features/post_share/presentation/bloc/post_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_social_embeds/social_embed_webview.dart';
 import 'package:video_player/video_player.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class PostShareScreen extends StatefulWidget {
   const PostShareScreen({super.key});
@@ -23,7 +23,6 @@ class PostShareScreen extends StatefulWidget {
 
 class _PostShareScreenState extends State<PostShareScreen> {
   late VideoPlayerController _controller;
-  final PostBloc _postBloc = getIt<PostBloc>();
   final CommonBloc _commonBloc = getIt<CommonBloc>();
   final TextEditingController _linkController = TextEditingController();
   final ValueNotifier<bool> _enabled = ValueNotifier(false);
@@ -51,7 +50,6 @@ class _PostShareScreenState extends State<PostShareScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: _commonBloc),
-        BlocProvider.value(value: _postBloc),
       ],
       child: BlocListener<CommonBloc, CommonState>(
         listener: (context, state) {
@@ -79,7 +77,7 @@ class _PostShareScreenState extends State<PostShareScreen> {
       color: Colors.white,
       child: SafeArea(
         child: SingleChildScrollView(
-          child: BlocBuilder<PostBloc, PostState>(
+          child: BlocBuilder<CommonBloc, CommonState>(
             builder: (context, state) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,15 +108,15 @@ class _PostShareScreenState extends State<PostShareScreen> {
                                     : _buildVideo(
                                         context,
                                         colorScheme,
-                                        commonState.videoResponse.embed,
+                                        commonState.videoResponse.link,
                                         commonState.videoResponse.socialType,
                                         textTheme,
                                       ),
                                 const SizedBox(
                                   height: 16,
                                 ),
-                                if (commonState.videoResponse.embed.isNotEmpty)
-                                  _buildSections(context, state, textTheme),
+                                if (commonState.videoResponse.link.isNotEmpty)
+                                  _buildSections(context, textTheme),
                               ],
                             );
                           },
@@ -132,8 +130,7 @@ class _PostShareScreenState extends State<PostShareScreen> {
     );
   }
 
-  Padding _buildSections(
-      BuildContext context, PostState state, TextTheme textTheme) {
+  Padding _buildSections(BuildContext context, TextTheme textTheme) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
@@ -219,9 +216,13 @@ class _PostShareScreenState extends State<PostShareScreen> {
             text: AppLocalizations.of(context)!.confirmPost,
             enabled: _linkController.text.trim().isNotEmpty,
             onTap: () {
-              _postBloc.add(
-                PostVideo(
-                  _linkController.text.trim(),
+              _commonBloc.add(
+                SendActivity(
+                  SendActivityParams(
+                    socialType: _selectedSocial.value,
+                    type: 0,
+                    link: _linkController.text.trim(),
+                  ),
                 ),
               );
             },
@@ -232,13 +233,33 @@ class _PostShareScreenState extends State<PostShareScreen> {
   Widget _buildVideo(BuildContext context, ColorScheme colorScheme, String link,
       int socialType, TextTheme textTheme) {
     if (link.isNotEmpty) {
+      final controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onProgress: (int progress) {
+              // Update loading bar.
+            },
+            onPageStarted: (String url) {},
+            onPageFinished: (String url) {},
+            onHttpError: (HttpResponseError error) {},
+            onWebResourceError: (WebResourceError error) {},
+            onNavigationRequest: (NavigationRequest request) {
+              if (request.url.startsWith('https://www.youtube.com/')) {
+                return NavigationDecision.prevent;
+              }
+              return NavigationDecision.navigate;
+            },
+          ),
+        )
+        ..loadRequest(Uri.parse(link));
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 750,
-          child: SocialEmbed(
-            htmlBody: link,
+          child: WebViewWidget(
+            controller: controller,
           ),
         ),
       );

@@ -3,6 +3,7 @@ import 'package:digital_defender/core/utils/constants/app_constants.dart';
 import 'package:digital_defender/core/utils/constants/constant_functions.dart';
 import 'package:digital_defender/features/contribute/data/models/send_content_params.dart';
 import 'package:digital_defender/features/contribute/domain/usecase/contribute_usecase.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
@@ -29,21 +30,22 @@ class ContributeBloc extends Bloc<ContributeEvent, ContributeState> {
     res.fold(
       (error) {
         showTopSnackbar(
-          title: "Error",
-          message: "Something went wrong, please try again",
-        );
+            title: "Error",
+            message: "Something went wrong, please try again",
+            backgroundColor: Colors.red);
         logger.d(error);
       },
       (response) {
-        // emit(
-        //   state.copyWith(
-        //     loginResponse: response,
-        //   ),
-        // );
+        emit(
+          state.copyWith(
+            sendContentResponse: response,
+          ),
+        );
       },
     );
     emit(
-      state.copyWith(isLoading: false),
+      state.copyWith(
+          isLoading: false, sendContentResponse: const SendContentResponse()),
     );
   }
 }

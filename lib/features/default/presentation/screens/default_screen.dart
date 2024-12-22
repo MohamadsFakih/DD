@@ -88,7 +88,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
         items: _navBarsItems(textTheme),
         handleAndroidBackButtonPress: true, // Default is true.
         resizeToAvoidBottomInset: true,
-        stateManagement: true, // Default is true.
+        stateManagement: false, // Default is true.
         hideNavigationBarWhenKeyboardAppears: true,
         padding: const EdgeInsets.only(top: 16),
         backgroundColor: Colors.grey.shade900,

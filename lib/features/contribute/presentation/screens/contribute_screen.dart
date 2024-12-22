@@ -1,3 +1,4 @@
+import 'package:digital_defender/core/utils/constants/constant_functions.dart';
 import 'package:digital_defender/di/di_container.dart';
 import 'package:digital_defender/features/common/presentation/widgets/page_title.dart';
 import 'package:digital_defender/features/common/presentation/widgets/social_media_switch.dart';
@@ -23,7 +24,21 @@ class _ContributeScreenState extends State<ContributeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(value: _contributeBloc, child: _buildContainer());
+    return BlocProvider.value(
+      value: _contributeBloc,
+      child: BlocListener<ContributeBloc, ContributeState>(
+        listener: (context, state) {
+          if (state.sendContentResponse.success) {
+            showTopSnackbar(
+              title: "Success",
+              message: "Your link is now pending approval from the admin",
+            );
+            _submitController.clear();
+          }
+        },
+        child: _buildContainer(),
+      ),
+    );
   }
 
   Container _buildContainer() {
@@ -33,7 +48,7 @@ class _ContributeScreenState extends State<ContributeScreen> {
         builder: (context, state) {
           return Column(
             children: [
-              PageTitle(
+              const PageTitle(
                 title:
                     "Help contribute in defending palestine, share positive content or report fake content",
                 icon: Icons.add,

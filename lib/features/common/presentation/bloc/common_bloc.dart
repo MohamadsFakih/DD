@@ -1,4 +1,5 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:digital_defender/features/common/data/models/send_activity_params.dart';
 import 'package:digital_defender/features/common/domain/usecase/common_usecase.dart';
 import 'package:digital_defender/features/login/data/models/login_params.dart';
 import 'package:digital_defender/features/post_share/data/model/get_video_response.dart';
@@ -12,10 +13,13 @@ class CommonBloc extends Bloc<CommonEvent, CommonState> {
   CommonBloc(this._commonUseCase) : super(const CommonState.initial()) {
     on<CommonEvent>((event, emit) async {
       await event.when(
-          getVideo: (int type, int socialType) =>
-              _getVideo(type, socialType, emit),
-          addUserData: (LoginResponse loginResponse) =>
-              _adduserData(loginResponse, emit));
+        getVideo: (int type, int socialType) =>
+            _getVideo(type, socialType, emit),
+        addUserData: (LoginResponse loginResponse) =>
+            _adduserData(loginResponse, emit),
+        sendActivity: (SendActivityParams params) =>
+            _sendActivity(params, emit),
+      );
     });
   }
 
@@ -28,7 +32,10 @@ class CommonBloc extends Bloc<CommonEvent, CommonState> {
     );
     final res = await _commonUseCase.getVideo(type, socialType);
 
-    res.fold((error) => emit(state), (response) {
+    res.fold(
+        (error) =>
+            emit(state.copyWith(videoResponse: const GetVideoResponse())),
+        (response) {
       emit(
         state.copyWith(
           videoResponse: response,
@@ -54,6 +61,35 @@ class CommonBloc extends Bloc<CommonEvent, CommonState> {
         loginResponse: loginResponse,
       ),
     );
+    emit(
+      state.copyWith(
+        isLoading: false,
+      ),
+    );
+  }
+
+  Future _sendActivity(
+      SendActivityParams params, Emitter<CommonState> emit) async {
+    emit(
+      state.copyWith(
+        isLoading: true,
+        success: false,
+      ),
+    );
+    final res = await _commonUseCase.sendActivity(params);
+
+    res.fold(
+        (error) => emit(
+              state.copyWith(
+                success: false,
+              ),
+            ), (response) {
+      emit(
+        state.copyWith(
+          success: response.success,
+        ),
+      );
+    });
     emit(
       state.copyWith(
         isLoading: false,
