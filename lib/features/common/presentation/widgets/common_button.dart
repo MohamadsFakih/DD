@@ -50,7 +50,7 @@ class CommonButton extends StatelessWidget {
           Text(
             text,
             style: textTheme.labelLarge
-                ?.copyWith(color: textColor ?? Colors.black),
+                ?.copyWith(color: textColor ?? Colors.white),
           ),
         ],
       ),

@@ -1,14 +1,15 @@
 import 'package:digital_defender/core/utils/constants/app_constants.dart';
+import 'package:digital_defender/core/utils/constants/constant_functions.dart';
 import 'package:digital_defender/di/di_container.dart';
 import 'package:digital_defender/features/common/data/models/send_activity_params.dart';
 import 'package:digital_defender/features/common/presentation/bloc/common_bloc.dart';
 import 'package:digital_defender/features/common/presentation/widgets/common_button.dart';
 import 'package:digital_defender/features/common/presentation/widgets/custom_loading.dart';
 import 'package:digital_defender/features/common/presentation/widgets/page_title.dart';
-import 'package:digital_defender/features/common/presentation/widgets/secondary_button.dart';
 import 'package:digital_defender/features/common/presentation/widgets/section_item.dart';
 import 'package:digital_defender/features/common/presentation/widgets/social_media_switch.dart';
 import 'package:digital_defender/features/common/presentation/widgets/video_unavailable.dart';
+import 'package:digital_defender/features/report_protect/widget/bold_step_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -102,8 +103,8 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
-  Padding _buildSteps(BuildContext context, CommonState postState, int val,
-      TextTheme textTheme) {
+  Padding _buildSteps(
+      BuildContext context, CommonState state, int val, TextTheme textTheme) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -126,23 +127,102 @@ class _ReportScreenState extends State<ReportScreen> {
           const SizedBox(
             height: 16,
           ),
-          const SectionItem(
+          BoldStepLine(
             number: "3",
-            title: "Click 'Report'.",
+            text: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Click ",
+                    style: textTheme.bodyLarge?.copyWith(color: Colors.black),
+                  ),
+                  TextSpan(
+                    text: "Report",
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ".",
+                    style: textTheme.bodyLarge?.copyWith(color: Colors.black),
+                  ),
+                ],
+              ),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.left,
+            ),
           ),
           const SizedBox(
             height: 16,
           ),
-          const SectionItem(
-            number: "4",
-            title: "Select ‘Hate speech or symbols’ as type of issue.",
+          BoldStepLine(
+            number: "3",
+            text: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Select ",
+                    style: textTheme.bodyLarge?.copyWith(color: Colors.black),
+                  ),
+                  TextSpan(
+                    text: "Hate speech or symbols ",
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "as a type of issue.",
+                    style: textTheme.bodyLarge?.copyWith(color: Colors.black),
+                  ),
+                ],
+              ),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.left,
+            ),
           ),
           const SizedBox(
             height: 16,
           ),
-          const SectionItem(
-            number: "5",
-            title: "Click ‘Submit report’.",
+          BoldStepLine(
+            number: "3",
+            text: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Click ",
+                    style: textTheme.bodyLarge?.copyWith(color: Colors.black),
+                  ),
+                  TextSpan(
+                    text: "Submit report",
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ".",
+                    style: textTheme.bodyLarge?.copyWith(color: Colors.black),
+                  ),
+                ],
+              ),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.left,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          CommonButton(
+            text:
+                "Report on ${getCorrectSocialMediaName(_selectedSocial.value)}",
+            onTap: () {
+              openUrl(state.videoResponse.link);
+            },
           ),
           const SizedBox(
             height: 16,
@@ -154,23 +234,16 @@ class _ReportScreenState extends State<ReportScreen> {
           const SizedBox(
             height: 16,
           ),
-          SecondaryButton(
-            text: AppLocalizations.of(context)!.uploadScreenshot,
-            onTap: () {
-              pickImage();
-            },
-          ),
-          const SizedBox(
-            height: 16,
-          ),
           CommonButton(
-            text: AppLocalizations.of(context)!.confirmReply,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            text: "Confirm Report",
             onTap: () {
               _commonBloc.add(
                 SendActivity(
                   SendActivityParams(
                     socialType: _selectedSocial.value,
-                    type: 1,
+                    type: 2,
                   ),
                 ),
               );
