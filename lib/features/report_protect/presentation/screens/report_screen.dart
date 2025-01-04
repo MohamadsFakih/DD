@@ -75,9 +75,8 @@ class _ReportScreenState extends State<ReportScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildMediaSwitch(),
-                       PageTitle(
-                        title:
-                            AppLocalizations.of(context)!.reportDesc,
+                      PageTitle(
+                        title: AppLocalizations.of(context)!.reportDesc,
                         icon: Icons.info,
                       ),
                       const SizedBox(
@@ -109,17 +108,16 @@ class _ReportScreenState extends State<ReportScreen> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-           SectionItem(
+          SectionItem(
             number: "1",
             title: AppLocalizations.of(context)!.openThePost,
           ),
           const SizedBox(
             height: 4,
           ),
-           SectionItem(
+          SectionItem(
             number: "2",
-            title:
-            AppLocalizations.of(context)!.tapThreeDots,
+            title: AppLocalizations.of(context)!.tapThreeDots,
           ),
           const SizedBox(
             height: 16,
@@ -130,7 +128,7 @@ class _ReportScreenState extends State<ReportScreen> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: AppLocalizations.of(context)!.click,
+                    text: "${AppLocalizations.of(context)!.click} ",
                     style: textTheme.bodyLarge?.copyWith(color: Colors.black),
                   ),
                   TextSpan(
@@ -160,7 +158,7 @@ class _ReportScreenState extends State<ReportScreen> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: AppLocalizations.of(context)!.select,
+                    text: "${AppLocalizations.of(context)!.select} ",
                     style: textTheme.bodyLarge?.copyWith(color: Colors.black),
                   ),
                   TextSpan(
@@ -190,7 +188,7 @@ class _ReportScreenState extends State<ReportScreen> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: AppLocalizations.of(context)!.click,
+                    text: "${AppLocalizations.of(context)!.click} ",
                     style: textTheme.bodyLarge?.copyWith(color: Colors.black),
                   ),
                   TextSpan(
@@ -224,7 +222,7 @@ class _ReportScreenState extends State<ReportScreen> {
           const SizedBox(
             height: 16,
           ),
-           SectionItem(
+          SectionItem(
             number: "6",
             title: AppLocalizations.of(context)!.confirmReportDesc,
           ),
