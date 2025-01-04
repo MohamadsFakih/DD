@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class SectionItem extends StatelessWidget {
-  const SectionItem({super.key, required this.number, required this.title});
+class BoldStepLine extends StatelessWidget {
+  const BoldStepLine({super.key, required this.number, required this.text});
   final String number;
-  final String title;
+  final Widget text;
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +26,7 @@ class SectionItem extends StatelessWidget {
           width: 8, // Increased spacing for better aesthetics
         ),
         Expanded(
-          child: Text(
-            title,
-            style: textTheme.bodyLarge?.copyWith(color: Colors.black),
-            maxLines: 4,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.left,
-          ),
+          child: text,
         ),
       ],
     );
