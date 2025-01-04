@@ -379,5 +379,38 @@
   "contribute": "Contribute",
   "@contribute": {
     "description": "found in the contribute page"
+  },
+  "reportDesc": "Defend the truth by reporting any content that misrepresents or harms Palestine's image",
+  "@reportDesc": {
+    "description": ""
+  },
+  "openThePost": "Open the post by clicking the button below.",
+  "@openThePost": {
+    "description": ""
+  },
+  "tapThreeDots": "Tap the three dots icon (⋯) located at the top of the post.",
+  "@tapThreeDots": {
+    "description": ""
+  },
+  "click": "Click",
+  "@click": {
+    "description": ""
+  },
+  "select": "Select",
+  "@select": {
+    "description": ""
+  },
+  "asAType": "as a type of issue",
+  "@asAType": {
+    "description": ""
+  },
+  "confirmReportDesc": "Confirm Report to confirm that you reported the post.",
+  "@confirmReportDesc": {
+    "description": ""
+  },
+
+  "confirmReport": "Confirm Report",
+  "@confirmReport": {
+    "description": ""
   }
 }

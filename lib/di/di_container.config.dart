@@ -86,12 +86,12 @@ _i174.GetIt $initGetIt(
     instanceName: 'base_url',
     registerFor: {_dev},
   );
-  gh.factory<_i686.ReplyService>(() => _i686.ReplyService(gh<_i361.Dio>()));
-  gh.factory<_i906.PostService>(() => _i906.PostService(gh<_i361.Dio>()));
   gh.factory<_i135.CommonService>(() => _i135.CommonService(gh<_i361.Dio>()));
-  gh.factory<_i978.LoginService>(() => _i978.LoginService(gh<_i361.Dio>()));
   gh.factory<_i94.ContributeService>(
       () => _i94.ContributeService(gh<_i361.Dio>()));
+  gh.factory<_i978.LoginService>(() => _i978.LoginService(gh<_i361.Dio>()));
+  gh.factory<_i906.PostService>(() => _i906.PostService(gh<_i361.Dio>()));
+  gh.factory<_i686.ReplyService>(() => _i686.ReplyService(gh<_i361.Dio>()));
   gh.factory<_i486.LoginSource>(
       () => _i310.LoginSourceImpl(gh<_i978.LoginService>()));
   gh.factory<_i533.LoginRepository>(() =>

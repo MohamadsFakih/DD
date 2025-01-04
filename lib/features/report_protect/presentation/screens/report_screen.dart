@@ -75,9 +75,9 @@ class _ReportScreenState extends State<ReportScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildMediaSwitch(),
-                      const PageTitle(
+                       PageTitle(
                         title:
-                            "Defend the truth by reporting any content that misrepresents or harms Palestine's image",
+                            AppLocalizations.of(context)!.reportDesc,
                         icon: Icons.info,
                       ),
                       const SizedBox(
@@ -109,20 +109,17 @@ class _ReportScreenState extends State<ReportScreen> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          const SectionItem(
+           SectionItem(
             number: "1",
-            title: "Open the post by clicking the button below.",
+            title: AppLocalizations.of(context)!.openThePost,
           ),
           const SizedBox(
             height: 4,
           ),
-          const SectionItem(
+           SectionItem(
             number: "2",
             title:
-                "Tap the three dots icon (⋯) located at the top of the post.",
-          ),
-          const SizedBox(
-            height: 16,
+            AppLocalizations.of(context)!.tapThreeDots,
           ),
           const SizedBox(
             height: 16,
@@ -133,7 +130,7 @@ class _ReportScreenState extends State<ReportScreen> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: "Click ",
+                    text: AppLocalizations.of(context)!.click,
                     style: textTheme.bodyLarge?.copyWith(color: Colors.black),
                   ),
                   TextSpan(
@@ -163,7 +160,7 @@ class _ReportScreenState extends State<ReportScreen> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: "Select ",
+                    text: AppLocalizations.of(context)!.select,
                     style: textTheme.bodyLarge?.copyWith(color: Colors.black),
                   ),
                   TextSpan(
@@ -193,7 +190,7 @@ class _ReportScreenState extends State<ReportScreen> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: "Click ",
+                    text: AppLocalizations.of(context)!.click,
                     style: textTheme.bodyLarge?.copyWith(color: Colors.black),
                   ),
                   TextSpan(
@@ -227,9 +224,9 @@ class _ReportScreenState extends State<ReportScreen> {
           const SizedBox(
             height: 16,
           ),
-          const SectionItem(
+           SectionItem(
             number: "6",
-            title: "Confirm Report to confirm that you reported the post.",
+            title: AppLocalizations.of(context)!.confirmReportDesc,
           ),
           const SizedBox(
             height: 16,
@@ -237,7 +234,7 @@ class _ReportScreenState extends State<ReportScreen> {
           CommonButton(
             backgroundColor: Colors.red,
             textColor: Colors.white,
-            text: "Confirm Report",
+            text: AppLocalizations.of(context)!.confirmReport,
             onTap: () {
               _commonBloc.add(
                 SendActivity(
